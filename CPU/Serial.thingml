@@ -11,7 +11,9 @@ thing fragment SerialMsgs {
 
 thing fragment Serial includes SerialMsgs 
 {
-	required port serial {
+	required port serial 
+	@sync_send "true"
+	{
 		receives serial_open, serial_close, serial_tx
 		sends serial_rx, serial_closed, serial_opened
 	}
@@ -19,7 +21,9 @@ thing fragment Serial includes SerialMsgs
 
 thing fragment SerialClientPort includes SerialMsgs 
 {
-	provided port serial {
+	provided port serial 
+	@sync_send "true"
+	{
 		sends serial_open, serial_close, serial_tx
 		receives serial_rx, serial_closed, serial_opened
 	}
