@@ -16,6 +16,10 @@ thing Test includes BridgeClient {
 	
 	statechart testChart init Init {
 		state Init {
+			on entry do
+				print "Test Init"
+			end
+			
 			transition -> Blink event bridge?CPUBridgeReady action do
 				bridge!setOutput(Led)
 			end
@@ -23,6 +27,7 @@ thing Test includes BridgeClient {
 		
 		state Blink {
 			on entry do
+				print "Blink"
 				bridge!timer_start(timerID, time)
 				if(On) do
 					bridge!setDigitalLow(Led)

@@ -26,8 +26,8 @@
  *****************************************************************************/
 
 //Declaration of instance variables
-struct Bridge_Instance TestCfg_bridge_var;
 struct LinuxSerial_Instance TestCfg_sp_var;
+struct Bridge_Instance TestCfg_bridge_var;
 
 
 // Dispatch for messages Bridge::serial::serial_open
@@ -36,15 +36,15 @@ if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
 }
 }
-// Dispatch for messages Bridge::serial::serial_close
-void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
 // Dispatch for messages Bridge::serial::serial_tx
 void dispatch_Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b){
 if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
+}
+}
+// Dispatch for messages Bridge::serial::serial_close
+void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
+if (_instance == &TestCfg_bridge_var) {
 }
 }
 // Dispatch for messages LinuxSerial::serial::serial_opened
@@ -89,6 +89,10 @@ register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_se
 register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
 register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
 
+// Init the ID, state variables and properties for instance TestCfg_sp
+TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
+TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
+
 // Init the ID, state variables and properties for instance TestCfg_bridge
 TestCfg_bridge_var.id = add_instance( (void*) &TestCfg_bridge_var);
 TestCfg_bridge_var.Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
@@ -97,10 +101,6 @@ TestCfg_bridge_var.Bridge_START_BYTE__var = 18;
 TestCfg_bridge_var.Bridge_STOP_BYTE__var = 19;
 TestCfg_bridge_var.Bridge_ESCAPE_BYTE__var = 125;
 TestCfg_bridge_var.Bridge_MsgSize__var = 0;
-
-// Init the ID, state variables and properties for instance TestCfg_sp
-TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
-TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
 
 LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
 Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &TestCfg_bridge_var);
