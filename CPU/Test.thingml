@@ -1,0 +1,39 @@
+import "Bridge.thingml"
+
+configuration TestCfg {
+	instance bridge : Bridge
+	instance sp : LinuxSerial
+	
+	connector sp.serial => bridge.serial
+}
+
+thing Test includes BridgeClient {
+
+	property On : Boolean = false
+	property time : UInt16 = 500
+	property timerID : UInt8 = 0
+	property Led : UInt8 = 13
+	
+	statechart testChart init Init {
+		state Init {
+			transition -> Blink action do
+				bridge!setOutput(Led)
+			end
+		}
+		
+		state Blink {
+			on entry do
+				bridge!timer_start(timerID, time)
+				if(On) do
+					bridge!setDigitalLow(Led)
+				end
+				if(not(On)) do
+					bridge!setDigitalHigh(Led)
+				end
+				On = not(On)
+			end
+			
+			transition -> Blink event bridge?timeout
+		}
+	}
+}

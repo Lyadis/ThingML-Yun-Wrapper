@@ -1,0 +1,20 @@
+import "Bridge.thingml"
+
+configuration DefaultCfg {
+	instance MC : ArduinoScheduler
+	instance bridge : Bridge
+	instance HelloWorld : MCReady
+	
+	connector bridge.Serial1 => MC.arduino
+	connector HelloWorld.arduino => MC.arduino
+}
+
+thing MCReady includes ArduinoApplication {
+	statechart MCReadyChart init Hello {
+		state Hello {
+			//internal event arduino?100ms_interrupt action do
+			//	arduino!serial_print_str("[MicroController] Ready\n")
+			//end
+		}
+	}
+}

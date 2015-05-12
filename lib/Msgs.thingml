@@ -1,0 +1,21 @@
+import "_Datatypes.thingml"
+
+thing fragment BridgeMsgs {
+    
+    message setDigitalHigh(pin : UInt8);
+	message setDigitalLow(pin : UInt8);
+	
+	message setOutput(pin : UInt8);
+	message setInput(pin : UInt8);
+	
+	message readDigital(pin : UInt8);
+	message readDigitalResponse(pin : UInt8, DigitalState : DigitalState);
+	
+	message readAnalog(pin : UInt8);
+	message readAnalogResponse(pin : UInt8, res : Int16);
+	
+	message timeout(id : UInt8);
+	message timer_start(id: UInt8, time: Integer);
+	message timer_cancel(id : UInt8);
+
+}

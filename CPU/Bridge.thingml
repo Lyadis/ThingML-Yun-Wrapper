@@ -1,0 +1,222 @@
+import "../lib/Msgs.thingml"
+import "LinuxSerial.thingml"
+
+thing fragment BridgeClient includes BridgeMsgs {
+	required port bridge {
+		sends setDigitalHigh, setDigitalLow, setOutput, setInput, readDigital, readAnalog,timer_start, timer_cancel
+		
+		receives readDigitalResponse, readAnalogResponse, timeout
+	}
+}
+
+thing Bridge includes BridgeMsgs, SerialClientPort {
+	provided port Serial1 {
+		receives setDigitalHigh, setDigitalLow, setOutput, setInput, readDigital, readAnalog,timer_start, timer_cancel
+		
+		sends readDigitalResponse, readAnalogResponse, timeout
+	}
+	
+	property START_BYTE : Byte = 18
+	property STOP_BYTE : Byte = 19
+	property ESCAPE_BYTE : Byte = 125
+	property Buffer : Byte[32]
+	property MsgSize : Byte = 0
+	
+	function SerialSend(b : Byte) do
+		if((b == START_BYTE) or (b == STOP_BYTE) or (b == ESCAPE_BYTE)) do
+			serial!serial_tx(ESCAPE_BYTE)
+		end
+		serial!serial_tx(b)
+	end
+	
+	function SerialStart() do
+		serial!serial_tx(START_BYTE)
+	end
+	
+	function SerialStop() do
+		serial!serial_tx(STOP_BYTE)
+	end
+	
+	function parse() do
+		'uint16_t msgID = 256 * '&Buffer[0]&' + '&Buffer[1]&';
+		switch(msgID){
+			case 2://readDigitalResponse
+				if('&Buffer[5]&' == 0) {
+					'
+					Serial1!readDigitalResponse(Buffer[4], DigitalState:LOW)
+					'
+				} else {
+					'
+					Serial1!readDigitalResponse(Buffer[4],DigitalState:HIGH)
+					'
+				}
+			break;
+			
+			case 9://readAnalogResponse
+				'
+				Serial1!readAnalogResponse(Buffer[4], Buffer[5] * 256 + Buffer[6])
+				'
+			break;
+			
+			case 8://timeout
+				'
+				Serial1!timeout(Buffer[4])
+				'
+			break;
+		}'
+	end
+	
+	statechart BridgeChart init Init {
+		state Init {
+			on entry do
+				serial!serial_open("/dev/ttyUSB0", 115200)
+			end
+			
+			transition -> Active
+		}
+		
+		composite state Active init Idle {
+			
+			internal event e : serial?serial_rx action do
+				print "[Bridge] received: " + e.b + "\n"
+			end
+			
+			internal event e : Serial1?setDigitalHigh action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('11')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?setDigitalLow action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('13')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?setOutput action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('12')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?setInput action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('15')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?readDigital action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('14')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?readAnalog action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('10')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.pin)
+				
+				SerialStop()
+			end
+			internal event e : Serial1?timer_start action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('16')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.id)
+				SerialSend('('&e.time&'>>8) & 0xFF')
+				SerialSend(''&e.time&' & 0xFF')
+				
+				SerialStop()
+			end
+			internal event e : Serial1?timer_cancel action do
+				SerialStart()
+				
+				SerialSend('0')
+				SerialSend('17')
+				
+				SerialSend('0')
+				SerialSend('1')
+				
+				SerialSend(e.id)
+				
+				SerialStop()
+			end
+			
+			state Idle {
+				transition -> Reading event e : serial?serial_rx guard e.b == START_BYTE
+			}
+			state Reading {
+				
+				transition -> Error event e : serial?serial_rx guard MsgSize > 31
+				transition -> Escaping event e : serial?serial_rx guard e.b == ESCAPE_BYTE
+				transition -> Idle event e : serial?serial_rx guard e.b == STOP_BYTE action do
+					parse()
+					MsgSize = 0
+				end
+				transition -> Reading event e : serial?serial_rx action do
+					Buffer[MsgSize] = e.b
+					MsgSize = MsgSize + 1
+				end
+			}
+			state Escaping {
+				
+				transition -> Error event e : serial?serial_rx guard MsgSize > 31
+				transition -> Reading event e : serial?serial_rx action do
+					Buffer[MsgSize] = e.b
+					MsgSize = MsgSize + 1
+				end
+			}
+			state Error {
+				transition -> Idle action do
+					MsgSize = 0
+				end
+			}
+		}
+	}
+}
