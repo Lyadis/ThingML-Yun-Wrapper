@@ -14,8 +14,8 @@
 #include <pthread.h>
 #include "thingml_typedefs.h"
 #include "runtime.h"
-#include "Bridge.h"
 #include "LinuxSerial.h"
+#include "Bridge.h"
 
 
 // NO C_HEADERS Annotation
@@ -36,19 +36,19 @@ if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
 }
 }
+// Dispatch for messages Bridge::serial::serial_close
+void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
+if (_instance == &TestCfg_bridge_var) {
+}
+}
 // Dispatch for messages Bridge::serial::serial_tx
 void dispatch_Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b){
 if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
 }
 }
-// Dispatch for messages Bridge::serial::serial_close
-void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_closed
-void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
+// Dispatch for messages LinuxSerial::serial::serial_opened
+void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
 if (_instance == &TestCfg_sp_var) {
 }
 }
@@ -58,8 +58,8 @@ if (_instance == &TestCfg_sp_var) {
 Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
 }
 }
-// Dispatch for messages LinuxSerial::serial::serial_opened
-void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
+// Dispatch for messages LinuxSerial::serial::serial_closed
+void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
 if (_instance == &TestCfg_sp_var) {
 }
 }
@@ -102,8 +102,8 @@ TestCfg_bridge_var.Bridge_MsgSize__var = 0;
 TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
 TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
 
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &TestCfg_bridge_var);
 LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
+Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &TestCfg_bridge_var);
 }
 
 

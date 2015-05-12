@@ -145,7 +145,10 @@ thing LinuxSerial includes Serial
 			end
 			
 			internal event c : serial?serial_tx
-			action send_byte(serial_device, c.b)
+			action do 
+				print "writing"
+				send_byte(serial_device, c.b)
+			end
 		}
 		
 	}	 

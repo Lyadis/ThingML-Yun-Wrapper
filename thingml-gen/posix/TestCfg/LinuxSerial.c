@@ -238,7 +238,11 @@ void LinuxSerial_handle_serial_serial_tx(struct LinuxSerial_Instance *_instance,
 uint8_t LinuxSerial_LinuxSerialImpl_State_event_consumed = 0;
 if (_instance->LinuxSerial_LinuxSerialImpl_State == LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE) {
 if (LinuxSerial_LinuxSerialImpl_State_event_consumed == 0 && 1) {
+{
+fprintf(stdout, "writing");
+
 f_LinuxSerial_send_byte(_instance, _instance->LinuxSerial_LinuxSerialImpl_serial_device__var, b);
+}
 LinuxSerial_LinuxSerialImpl_State_event_consumed = 1;
 }
 }
