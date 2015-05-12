@@ -3,8 +3,10 @@ import "Bridge.thingml"
 configuration TestCfg {
 	instance bridge : Bridge
 	instance sp : LinuxSerial
+	instance t : Test
 	
 	connector sp.serial => bridge.serial
+	connector t.bridge => bridge.Serial1
 }
 
 thing Test includes BridgeClient {
