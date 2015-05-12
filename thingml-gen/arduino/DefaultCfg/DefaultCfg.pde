@@ -859,6 +859,24 @@ _fifo_enqueue(pin & 0xFF);
 // parameter DigitalState
 _fifo_enqueue(DigitalState & 0xFF);
 }
+
+
+forwardByteSerial_Start();
+
+forwardByteSerial( (9 >> 8) & 0xFF );
+forwardByteSerial( 9 & 0xFF );
+
+// ID of the source instance
+forwardByteSerial( (_instance->id >> 8) & 0xFF );
+forwardByteSerial( _instance->id & 0xFF );
+
+// parameter pin
+forwardByteSerial(pin & 0xFF);
+
+// parameter DigitalState
+forwardByteSerial(DigitalState & 0xFF);
+
+forwardByteSerial_Stop();
 }
 // Enqueue of messages ArduinoScheduler::arduino::4ms_interrupt
 void enqueue_ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
@@ -937,6 +955,21 @@ _fifo_enqueue( _instance->id & 0xFF );
 // parameter id
 _fifo_enqueue(id & 0xFF);
 }
+
+
+forwardByteSerial_Start();
+
+forwardByteSerial( (9 >> 8) & 0xFF );
+forwardByteSerial( 9 & 0xFF );
+
+// ID of the source instance
+forwardByteSerial( (_instance->id >> 8) & 0xFF );
+forwardByteSerial( _instance->id & 0xFF );
+
+// parameter id
+forwardByteSerial(id & 0xFF);
+
+forwardByteSerial_Stop();
 }
 // Enqueue of messages ArduinoScheduler::arduino::readAnalogResponse
 void enqueue_ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
@@ -956,6 +989,25 @@ _fifo_enqueue(pin & 0xFF);
 _fifo_enqueue((res>>8) & 0xFF);
 _fifo_enqueue(res & 0xFF);
 }
+
+
+forwardByteSerial_Start();
+
+forwardByteSerial( (9 >> 8) & 0xFF );
+forwardByteSerial( 9 & 0xFF );
+
+// ID of the source instance
+forwardByteSerial( (_instance->id >> 8) & 0xFF );
+forwardByteSerial( _instance->id & 0xFF );
+
+// parameter pin
+forwardByteSerial(pin & 0xFF);
+
+// parameter res
+forwardByteSerial((res>>8) & 0xFF);
+forwardByteSerial(res & 0xFF);
+
+forwardByteSerial_Stop();
 }
 // Enqueue of messages Bridge::Serial1::readAnalog
 void enqueue_Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
@@ -1417,12 +1469,14 @@ Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &DefaultCfg_bridge_var);
  *****************************************************************************/
 
 void setup() {
+setupArduinoSerialForward(0);
 initialize_configuration_DefaultCfg();
 ArduinoScheduler_handle_polling_setup(&DefaultCfg_MC_var);
 
 }
 
 void loop() {
+readSerial();
 ArduinoScheduler_handle_polling_poll(&DefaultCfg_MC_var);
 
 processMessageQueue();
