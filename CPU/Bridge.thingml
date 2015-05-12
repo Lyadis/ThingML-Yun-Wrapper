@@ -1,19 +1,23 @@
 import "../lib/Msgs.thingml"
 import "LinuxSerial.thingml"
 
-thing fragment BridgeClient includes BridgeMsgs {
+thing fragment ReadyMsg {
+	message CPUBridgeReady();
+}
+
+thing fragment BridgeClient includes BridgeMsgs, ReadyMsg  {
 	required port bridge {
 		sends setDigitalHigh, setDigitalLow, setOutput, setInput, readDigital, readAnalog,timer_start, timer_cancel
 		
-		receives readDigitalResponse, readAnalogResponse, timeout
+		receives readDigitalResponse, readAnalogResponse, timeout, CPUBridgeReady
 	}
 }
 
-thing Bridge includes BridgeMsgs, SerialClientPort {
+thing Bridge includes BridgeMsgs, SerialClientPort, ReadyMsg {
 	provided port Serial1 {
 		receives setDigitalHigh, setDigitalLow, setOutput, setInput, readDigital, readAnalog,timer_start, timer_cancel
 		
-		sends readDigitalResponse, readAnalogResponse, timeout
+		sends readDigitalResponse, readAnalogResponse, timeout, CPUBridgeReady
 	}
 	
 	property START_BYTE : Byte = 18
@@ -72,7 +76,9 @@ thing Bridge includes BridgeMsgs, SerialClientPort {
 				serial!serial_open("/dev/ttyATH0", 115200)
 			end
 			
-			transition -> Active
+			transition -> Active action do
+				Serial1!CPUBridgeReady()
+			end
 		}
 		
 		composite state Active init Idle {

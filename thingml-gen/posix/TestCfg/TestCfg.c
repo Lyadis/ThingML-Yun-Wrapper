@@ -26,26 +26,10 @@
  *****************************************************************************/
 
 //Declaration of instance variables
-struct LinuxSerial_Instance TestCfg_sp_var;
 struct Bridge_Instance TestCfg_bridge_var;
+struct LinuxSerial_Instance TestCfg_sp_var;
 
 
-// Dispatch for messages LinuxSerial::serial::serial_rx
-void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
-if (_instance == &TestCfg_sp_var) {
-Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_closed
-void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
-if (_instance == &TestCfg_sp_var) {
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_opened
-void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
-if (_instance == &TestCfg_sp_var) {
-}
-}
 // Dispatch for messages Bridge::serial::serial_open
 void dispatch_Bridge_send_serial_serial_open(struct Bridge_Instance *_instance, char * device, int baudrate){
 if (_instance == &TestCfg_bridge_var) {
@@ -61,6 +45,22 @@ LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
 // Dispatch for messages Bridge::serial::serial_close
 void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
 if (_instance == &TestCfg_bridge_var) {
+}
+}
+// Dispatch for messages LinuxSerial::serial::serial_closed
+void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
+if (_instance == &TestCfg_sp_var) {
+}
+}
+// Dispatch for messages LinuxSerial::serial::serial_rx
+void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
+if (_instance == &TestCfg_sp_var) {
+Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
+}
+}
+// Dispatch for messages LinuxSerial::serial::serial_opened
+void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
+if (_instance == &TestCfg_sp_var) {
 }
 }
 
@@ -82,16 +82,12 @@ switch(code) {
 
 void initialize_configuration_TestCfg() {
 // Initialize connectors
-register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_serial_serial_rx);
-register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
-register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
 register_Bridge_send_serial_serial_open_listener(dispatch_Bridge_send_serial_serial_open);
 register_Bridge_send_serial_serial_close_listener(dispatch_Bridge_send_serial_serial_close);
 register_Bridge_send_serial_serial_tx_listener(dispatch_Bridge_send_serial_serial_tx);
-
-// Init the ID, state variables and properties for instance TestCfg_sp
-TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
-TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
+register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_serial_serial_rx);
+register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
+register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
 
 // Init the ID, state variables and properties for instance TestCfg_bridge
 TestCfg_bridge_var.id = add_instance( (void*) &TestCfg_bridge_var);
@@ -102,8 +98,12 @@ TestCfg_bridge_var.Bridge_STOP_BYTE__var = 19;
 TestCfg_bridge_var.Bridge_ESCAPE_BYTE__var = 125;
 TestCfg_bridge_var.Bridge_MsgSize__var = 0;
 
-LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
+// Init the ID, state variables and properties for instance TestCfg_sp
+TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
+TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
+
 Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &TestCfg_bridge_var);
+LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
 }
 
 

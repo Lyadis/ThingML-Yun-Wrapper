@@ -16,7 +16,7 @@ thing Test includes BridgeClient {
 	
 	statechart testChart init Init {
 		state Init {
-			transition -> Blink action do
+			transition -> Blink event bridge?CPUBridgeReady action do
 				bridge!setOutput(Led)
 			end
 		}
