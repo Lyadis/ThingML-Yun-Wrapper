@@ -26,13 +26,14 @@
  *****************************************************************************/
 
 //Declaration of instance variables
-struct Bridge_Instance TestCfg_bridge_var;
 struct LinuxSerial_Instance TestCfg_sp_var;
+struct Bridge_Instance TestCfg_bridge_var;
 
 
-// Dispatch for messages LinuxSerial::serial::serial_opened
-void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
+// Dispatch for messages LinuxSerial::serial::serial_rx
+void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
 if (_instance == &TestCfg_sp_var) {
+Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
 }
 }
 // Dispatch for messages LinuxSerial::serial::serial_closed
@@ -40,10 +41,9 @@ void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance 
 if (_instance == &TestCfg_sp_var) {
 }
 }
-// Dispatch for messages LinuxSerial::serial::serial_rx
-void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
+// Dispatch for messages LinuxSerial::serial::serial_opened
+void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
 if (_instance == &TestCfg_sp_var) {
-Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
 }
 }
 // Dispatch for messages Bridge::serial::serial_open
@@ -52,15 +52,15 @@ if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
 }
 }
-// Dispatch for messages Bridge::serial::serial_close
-void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
 // Dispatch for messages Bridge::serial::serial_tx
 void dispatch_Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b){
 if (_instance == &TestCfg_bridge_var) {
 LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
+}
+}
+// Dispatch for messages Bridge::serial::serial_close
+void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
+if (_instance == &TestCfg_bridge_var) {
 }
 }
 
