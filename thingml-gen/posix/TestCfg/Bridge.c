@@ -140,44 +140,6 @@ default: break;
 }
 
 // Event Handlers for incoming messages:
-void Bridge_handle_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 17);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, id);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 13);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
 void Bridge_handle_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin) {
 uint8_t Bridge_BridgeChart_State_event_consumed = 0;
 if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
@@ -228,6 +190,44 @@ if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
 f_Bridge_SerialStart(_instance);
 f_Bridge_SerialSend(_instance, 0);
 f_Bridge_SerialSend(_instance, 12);
+f_Bridge_SerialSend(_instance, 0);
+f_Bridge_SerialSend(_instance, 1);
+f_Bridge_SerialSend(_instance, pin);
+f_Bridge_SerialStop(_instance);
+}
+Bridge_BridgeChart_State_event_consumed = 1;
+}
+}
+}
+void Bridge_handle_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id) {
+uint8_t Bridge_BridgeChart_State_event_consumed = 0;
+if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
+uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
+Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
+if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
+{
+f_Bridge_SerialStart(_instance);
+f_Bridge_SerialSend(_instance, 0);
+f_Bridge_SerialSend(_instance, 17);
+f_Bridge_SerialSend(_instance, 0);
+f_Bridge_SerialSend(_instance, 1);
+f_Bridge_SerialSend(_instance, id);
+f_Bridge_SerialStop(_instance);
+}
+Bridge_BridgeChart_State_event_consumed = 1;
+}
+}
+}
+void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin) {
+uint8_t Bridge_BridgeChart_State_event_consumed = 0;
+if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
+uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
+Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
+if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
+{
+f_Bridge_SerialStart(_instance);
+f_Bridge_SerialSend(_instance, 0);
+f_Bridge_SerialSend(_instance, 13);
 f_Bridge_SerialSend(_instance, 0);
 f_Bridge_SerialSend(_instance, 1);
 f_Bridge_SerialSend(_instance, pin);
