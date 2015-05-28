@@ -17,494 +17,134 @@
 #define DIGITALSTATE_HIGH 1
 
 /*****************************************************************************
- * Headers for type : Bridge
+ * Headers for type : MinTest
  *****************************************************************************/
 
 // Definition of the instance stuct:
-struct Bridge_Instance {
+struct MinTest_Instance {
 // Variables for the ID of the instance
 int id;
 // Variables for the current instance state
-int Bridge_BridgeChart_State;
-int Bridge_BridgeChart_Active_State;
+int MinTest_TestChart_State;
 // Variables for the properties of the instance
-uint8_t Bridge_START_BYTE__var;
-uint8_t Bridge_STOP_BYTE__var;
-uint8_t Bridge_ESCAPE_BYTE__var;
-uint8_t Bridge_Buffer__var[32];
-uint8_t Bridge_MsgSize__var;
 };
 
 // Declaration of prototypes outgoing messages:
-void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance);
-void Bridge_handle_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time);
-void Bridge_handle_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id);
-void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_serial_serial_opened(struct Bridge_Instance *_instance);
-void Bridge_handle_serial_serial_rx(struct Bridge_Instance *_instance, uint8_t b);
+void MinTest_TestChart_OnEntry(int state, struct MinTest_Instance *_instance);
+void MinTest_handle_serial_serial_opened(struct MinTest_Instance *_instance);
+void MinTest_handle_serial_serial_rx(struct MinTest_Instance *_instance, uint8_t b);
 // Declaration of callbacks for incomming messages:
-void register_Bridge_send_Serial1_readDigitalResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, uint8_t));
-void register_Bridge_send_Serial1_readAnalogResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int));
-void register_Bridge_send_Serial1_timeout_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_CPUBridgeReady_listener(void (*_listener)(struct Bridge_Instance*));
-void register_Bridge_send_serial_serial_open_listener(void (*_listener)(struct Bridge_Instance*, char *, int));
-void register_Bridge_send_serial_serial_close_listener(void (*_listener)(struct Bridge_Instance*));
-void register_Bridge_send_serial_serial_tx_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_MinTest_send_serial_serial_open_listener(void (*_listener)(struct MinTest_Instance*, char *, int));
+void register_MinTest_send_serial_serial_close_listener(void (*_listener)(struct MinTest_Instance*));
+void register_MinTest_send_serial_serial_tx_listener(void (*_listener)(struct MinTest_Instance*, uint8_t));
 
 // Definition of the states:
-#define BRIDGE_BRIDGECHART_STATE 0
-#define BRIDGE_BRIDGECHART_INIT_STATE 1
-#define BRIDGE_BRIDGECHART_ACTIVE_STATE 2
-#define BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE 3
-#define BRIDGE_BRIDGECHART_ACTIVE_READING_STATE 4
-#define BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE 5
-#define BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE 6
+#define MINTEST_TESTCHART_STATE 0
+#define MINTEST_TESTCHART_INIT_STATE 1
+#define MINTEST_TESTCHART_PARLE_STATE 2
 
 /*****************************************************************************
- * Implementation for type : Bridge
+ * Implementation for type : MinTest
  *****************************************************************************/
 
 // Declaration of prototypes:
 #ifdef EXTERN_C_PROTOTYPES
 extern "C" {
 #endif
-void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance);
-void Bridge_send_Serial1_readDigitalResponse(struct Bridge_Instance *_instance, uint8_t pin, uint8_t DigitalState);
-void Bridge_send_Serial1_readAnalogResponse(struct Bridge_Instance *_instance, uint8_t pin, int res);
-void Bridge_send_Serial1_timeout(struct Bridge_Instance *_instance, uint8_t id);
-void Bridge_send_Serial1_CPUBridgeReady(struct Bridge_Instance *_instance);
-void Bridge_send_serial_serial_open(struct Bridge_Instance *_instance, char * device, int baudrate);
-void Bridge_send_serial_serial_close(struct Bridge_Instance *_instance);
-void Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b);
-void f_Bridge_SerialSend(struct Bridge_Instance *_instance, uint8_t b);
-void f_Bridge_SerialStart(struct Bridge_Instance *_instance);
-void f_Bridge_SerialStop(struct Bridge_Instance *_instance);
-void f_Bridge_parse(struct Bridge_Instance *_instance);
+void MinTest_TestChart_OnExit(int state, struct MinTest_Instance *_instance);
+void MinTest_send_serial_serial_open(struct MinTest_Instance *_instance, char * device, int baudrate);
+void MinTest_send_serial_serial_close(struct MinTest_Instance *_instance);
+void MinTest_send_serial_serial_tx(struct MinTest_Instance *_instance, uint8_t b);
 #ifdef EXTERN_C_PROTOTYPES
 }
 #endif
 
 // Declaration of functions:
-// Definition of function SerialSend
-void f_Bridge_SerialSend(struct Bridge_Instance *_instance, uint8_t b) {
-{
-if((b == _instance->Bridge_START_BYTE__var) || (b == _instance->Bridge_STOP_BYTE__var) || (b == _instance->Bridge_ESCAPE_BYTE__var)) {
-Bridge_send_serial_serial_tx(_instance, _instance->Bridge_ESCAPE_BYTE__var);
-}
-Bridge_send_serial_serial_tx(_instance, b);
-}
-}
-
-// Definition of function SerialStart
-void f_Bridge_SerialStart(struct Bridge_Instance *_instance) {
-{
-Bridge_send_serial_serial_tx(_instance, _instance->Bridge_START_BYTE__var);
-}
-}
-
-// Definition of function SerialStop
-void f_Bridge_SerialStop(struct Bridge_Instance *_instance) {
-{
-Bridge_send_serial_serial_tx(_instance, _instance->Bridge_STOP_BYTE__var);
-}
-}
-
-// Definition of function parse
-void f_Bridge_parse(struct Bridge_Instance *_instance) {
-{
-uint16_t msgID = 256 * _instance->Bridge_Buffer__var[0] + _instance->Bridge_Buffer__var[1];
-		switch(msgID){
-			case 2://readDigitalResponse
-				if(_instance->Bridge_Buffer__var[5] == 0) {
-					
-Bridge_send_Serial1_readDigitalResponse(_instance, _instance->Bridge_Buffer__var[4], DIGITALSTATE_LOW);
-
-				} else {
-					
-Bridge_send_Serial1_readDigitalResponse(_instance, _instance->Bridge_Buffer__var[4], DIGITALSTATE_HIGH);
-
-				}
-			break;
-			
-			case 9://readAnalogResponse
-				
-Bridge_send_Serial1_readAnalogResponse(_instance, _instance->Bridge_Buffer__var[4], _instance->Bridge_Buffer__var[5] * 256 + _instance->Bridge_Buffer__var[6]);
-
-			break;
-			
-			case 8://timeout
-				
-Bridge_send_Serial1_timeout(_instance, _instance->Bridge_Buffer__var[4]);
-
-			break;
-		}
-}
-}
-
 
 // On Entry Actions:
-void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance) {
+void MinTest_TestChart_OnEntry(int state, struct MinTest_Instance *_instance) {
 switch(state) {
-case BRIDGE_BRIDGECHART_STATE:
-_instance->Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
-Bridge_BridgeChart_OnEntry(_instance->Bridge_BridgeChart_State, _instance);
+case MINTEST_TESTCHART_STATE:
+_instance->MinTest_TestChart_State = MINTEST_TESTCHART_INIT_STATE;
+MinTest_TestChart_OnEntry(_instance->MinTest_TestChart_State, _instance);
 break;
-case BRIDGE_BRIDGECHART_INIT_STATE:
+case MINTEST_TESTCHART_INIT_STATE:
 {
-Bridge_send_serial_serial_open(_instance, "/dev/ttyATH0", 115200);
+// PRINT: "[Test] Start "
+MinTest_send_serial_serial_open(_instance, "/dev/ttyATH0", 115200);
 }
 break;
-case BRIDGE_BRIDGECHART_ACTIVE_STATE:
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE;
-Bridge_BridgeChart_OnEntry(_instance->Bridge_BridgeChart_Active_State, _instance);
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_READING_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE:
+case MINTEST_TESTCHART_PARLE_STATE:
+{
+// PRINT: "[Test] Parle "
+MinTest_send_serial_serial_tx(_instance, 255);
+}
 break;
 default: break;
 }
 }
 
 // On Exit Actions:
-void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance) {
+void MinTest_TestChart_OnExit(int state, struct MinTest_Instance *_instance) {
 switch(state) {
-case BRIDGE_BRIDGECHART_STATE:
-Bridge_BridgeChart_OnExit(_instance->Bridge_BridgeChart_State, _instance);
+case MINTEST_TESTCHART_STATE:
+MinTest_TestChart_OnExit(_instance->MinTest_TestChart_State, _instance);
 break;
-case BRIDGE_BRIDGECHART_INIT_STATE:
+case MINTEST_TESTCHART_INIT_STATE:
 break;
-case BRIDGE_BRIDGECHART_ACTIVE_STATE:
-Bridge_BridgeChart_OnExit(_instance->Bridge_BridgeChart_Active_State, _instance);
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_READING_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE:
-break;
-case BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE:
+case MINTEST_TESTCHART_PARLE_STATE:
 break;
 default: break;
 }
 }
 
 // Event Handlers for incoming messages:
-void Bridge_handle_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
+void MinTest_handle_serial_serial_opened(struct MinTest_Instance *_instance) {
+uint8_t MinTest_TestChart_State_event_consumed = 0;
+if (_instance->MinTest_TestChart_State == MINTEST_TESTCHART_INIT_STATE) {
+if (MinTest_TestChart_State_event_consumed == 0 && 1) {
+MinTest_TestChart_OnExit(MINTEST_TESTCHART_INIT_STATE, _instance);
+_instance->MinTest_TestChart_State = MINTEST_TESTCHART_PARLE_STATE;
+MinTest_TestChart_OnEntry(MINTEST_TESTCHART_PARLE_STATE, _instance);
+MinTest_TestChart_State_event_consumed = 1;
+}
+}
+}
+void MinTest_handle_serial_serial_rx(struct MinTest_Instance *_instance, uint8_t b) {
+uint8_t MinTest_TestChart_State_event_consumed = 0;
+if (_instance->MinTest_TestChart_State == MINTEST_TESTCHART_PARLE_STATE) {
+if (MinTest_TestChart_State_event_consumed == 0 && 1) {
 {
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 11);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
+// PRINT: "[Test] rx: \'"
+// PRINT: b
+// PRINT: "\' "
 }
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 10);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 14);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 12);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 15);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 16);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, id);
-f_Bridge_SerialSend(_instance, (time>>8) & 0xFF);
-f_Bridge_SerialSend(_instance, time & 0xFF);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 17);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, id);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-f_Bridge_SerialStart(_instance);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 13);
-f_Bridge_SerialSend(_instance, 0);
-f_Bridge_SerialSend(_instance, 1);
-f_Bridge_SerialSend(_instance, pin);
-f_Bridge_SerialStop(_instance);
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_serial_serial_opened(struct Bridge_Instance *_instance) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_INIT_STATE) {
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_INIT_STATE, _instance);
-_instance->Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_ACTIVE_STATE;
-{
-Bridge_send_Serial1_CPUBridgeReady(_instance);
-}
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_STATE, _instance);
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_serial_serial_rx(struct Bridge_Instance *_instance, uint8_t b) {
-uint8_t Bridge_BridgeChart_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-uint8_t Bridge_BridgeChart_Active_State_event_consumed = 0;
-if (_instance->Bridge_BridgeChart_Active_State == BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE) {
-if (Bridge_BridgeChart_Active_State_event_consumed == 0 && b == _instance->Bridge_START_BYTE__var) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_READING_STATE;
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-}
-else if (_instance->Bridge_BridgeChart_Active_State == BRIDGE_BRIDGECHART_ACTIVE_READING_STATE) {
-if (Bridge_BridgeChart_Active_State_event_consumed == 0 && _instance->Bridge_MsgSize__var > 31) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE;
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-else if (Bridge_BridgeChart_Active_State_event_consumed == 0 && b == _instance->Bridge_ESCAPE_BYTE__var) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE;
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-else if (Bridge_BridgeChart_Active_State_event_consumed == 0 && b == _instance->Bridge_STOP_BYTE__var) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE;
-{
-f_Bridge_parse(_instance);
-_instance->Bridge_MsgSize__var = 0;
-}
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-else if (Bridge_BridgeChart_Active_State_event_consumed == 0 && 1) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_READING_STATE;
-{
-_instance->Bridge_Buffer__var[_instance->Bridge_MsgSize__var] = b;
-_instance->Bridge_MsgSize__var = _instance->Bridge_MsgSize__var + 1;
-}
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-}
-else if (_instance->Bridge_BridgeChart_Active_State == BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE) {
-if (Bridge_BridgeChart_Active_State_event_consumed == 0 && _instance->Bridge_MsgSize__var > 31) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE;
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-else if (Bridge_BridgeChart_Active_State_event_consumed == 0 && 1) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_ESCAPING_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_READING_STATE;
-{
-_instance->Bridge_Buffer__var[_instance->Bridge_MsgSize__var] = b;
-_instance->Bridge_MsgSize__var = _instance->Bridge_MsgSize__var + 1;
-}
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_READING_STATE, _instance);
-Bridge_BridgeChart_Active_State_event_consumed = 1;
-}
-}
-Bridge_BridgeChart_State_event_consumed = 0 | Bridge_BridgeChart_Active_State_event_consumed ;
-if (Bridge_BridgeChart_State_event_consumed == 0 && 1) {
-{
-// PRINT: "[Bridge] received: " + b
-// PRINT: "\n"
-}
-Bridge_BridgeChart_State_event_consumed = 1;
-}
-}
-}
-void Bridge_handle_empty_event(struct Bridge_Instance *_instance) {
-if (_instance->Bridge_BridgeChart_State == BRIDGE_BRIDGECHART_ACTIVE_STATE) {
-if (_instance->Bridge_BridgeChart_Active_State == BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE) {
-if (1) {
-Bridge_BridgeChart_OnExit(BRIDGE_BRIDGECHART_ACTIVE_ERROR_STATE, _instance);
-_instance->Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE;
-{
-_instance->Bridge_MsgSize__var = 0;
-}
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE, _instance);
-}
+MinTest_TestChart_State_event_consumed = 1;
 }
 }
 }
 
 // Observers for outgoing messages:
-void (*Bridge_send_Serial1_readDigitalResponse_listener)(struct Bridge_Instance*, uint8_t, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_readDigitalResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, uint8_t)){
-Bridge_send_Serial1_readDigitalResponse_listener = _listener;
+void (*MinTest_send_serial_serial_open_listener)(struct MinTest_Instance*, char *, int)= 0x0;
+void register_MinTest_send_serial_serial_open_listener(void (*_listener)(struct MinTest_Instance*, char *, int)){
+MinTest_send_serial_serial_open_listener = _listener;
 }
-void Bridge_send_Serial1_readDigitalResponse(struct Bridge_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if (Bridge_send_Serial1_readDigitalResponse_listener != 0x0) Bridge_send_Serial1_readDigitalResponse_listener(_instance, pin, DigitalState);
+void MinTest_send_serial_serial_open(struct MinTest_Instance *_instance, char * device, int baudrate){
+if (MinTest_send_serial_serial_open_listener != 0x0) MinTest_send_serial_serial_open_listener(_instance, device, baudrate);
 }
-void (*Bridge_send_Serial1_readAnalogResponse_listener)(struct Bridge_Instance*, uint8_t, int)= 0x0;
-void register_Bridge_send_Serial1_readAnalogResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int)){
-Bridge_send_Serial1_readAnalogResponse_listener = _listener;
+void (*MinTest_send_serial_serial_close_listener)(struct MinTest_Instance*)= 0x0;
+void register_MinTest_send_serial_serial_close_listener(void (*_listener)(struct MinTest_Instance*)){
+MinTest_send_serial_serial_close_listener = _listener;
 }
-void Bridge_send_Serial1_readAnalogResponse(struct Bridge_Instance *_instance, uint8_t pin, int res){
-if (Bridge_send_Serial1_readAnalogResponse_listener != 0x0) Bridge_send_Serial1_readAnalogResponse_listener(_instance, pin, res);
+void MinTest_send_serial_serial_close(struct MinTest_Instance *_instance){
+if (MinTest_send_serial_serial_close_listener != 0x0) MinTest_send_serial_serial_close_listener(_instance);
 }
-void (*Bridge_send_Serial1_timeout_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_timeout_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_timeout_listener = _listener;
+void (*MinTest_send_serial_serial_tx_listener)(struct MinTest_Instance*, uint8_t)= 0x0;
+void register_MinTest_send_serial_serial_tx_listener(void (*_listener)(struct MinTest_Instance*, uint8_t)){
+MinTest_send_serial_serial_tx_listener = _listener;
 }
-void Bridge_send_Serial1_timeout(struct Bridge_Instance *_instance, uint8_t id){
-if (Bridge_send_Serial1_timeout_listener != 0x0) Bridge_send_Serial1_timeout_listener(_instance, id);
-}
-void (*Bridge_send_Serial1_CPUBridgeReady_listener)(struct Bridge_Instance*)= 0x0;
-void register_Bridge_send_Serial1_CPUBridgeReady_listener(void (*_listener)(struct Bridge_Instance*)){
-Bridge_send_Serial1_CPUBridgeReady_listener = _listener;
-}
-void Bridge_send_Serial1_CPUBridgeReady(struct Bridge_Instance *_instance){
-if (Bridge_send_Serial1_CPUBridgeReady_listener != 0x0) Bridge_send_Serial1_CPUBridgeReady_listener(_instance);
-}
-void (*Bridge_send_serial_serial_open_listener)(struct Bridge_Instance*, char *, int)= 0x0;
-void register_Bridge_send_serial_serial_open_listener(void (*_listener)(struct Bridge_Instance*, char *, int)){
-Bridge_send_serial_serial_open_listener = _listener;
-}
-void Bridge_send_serial_serial_open(struct Bridge_Instance *_instance, char * device, int baudrate){
-if (Bridge_send_serial_serial_open_listener != 0x0) Bridge_send_serial_serial_open_listener(_instance, device, baudrate);
-}
-void (*Bridge_send_serial_serial_close_listener)(struct Bridge_Instance*)= 0x0;
-void register_Bridge_send_serial_serial_close_listener(void (*_listener)(struct Bridge_Instance*)){
-Bridge_send_serial_serial_close_listener = _listener;
-}
-void Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
-if (Bridge_send_serial_serial_close_listener != 0x0) Bridge_send_serial_serial_close_listener(_instance);
-}
-void (*Bridge_send_serial_serial_tx_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_serial_serial_tx_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_serial_serial_tx_listener = _listener;
-}
-void Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b){
-if (Bridge_send_serial_serial_tx_listener != 0x0) Bridge_send_serial_serial_tx_listener(_instance, b);
+void MinTest_send_serial_serial_tx(struct MinTest_Instance *_instance, uint8_t b){
+if (MinTest_send_serial_serial_tx_listener != 0x0) MinTest_send_serial_serial_tx_listener(_instance, b);
 }
 
 /*****************************************************************************
@@ -811,193 +451,6 @@ void LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instanc
 if (LinuxSerial_send_serial_serial_opened_listener != 0x0) LinuxSerial_send_serial_serial_opened_listener(_instance);
 }
 
-/*****************************************************************************
- * Headers for type : Test
- *****************************************************************************/
-
-// Definition of the instance stuct:
-struct Test_Instance {
-// Variables for the ID of the instance
-int id;
-// Variables for the current instance state
-int Test_testChart_State;
-// Variables for the properties of the instance
-uint8_t Test_On__var;
-uint16_t Test_time__var;
-uint8_t Test_timerID__var;
-uint8_t Test_Led__var;
-};
-
-// Declaration of prototypes outgoing messages:
-void Test_testChart_OnEntry(int state, struct Test_Instance *_instance);
-void Test_handle_bridge_CPUBridgeReady(struct Test_Instance *_instance);
-void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id);
-// Declaration of callbacks for incomming messages:
-void register_Test_send_bridge_setDigitalHigh_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_setDigitalLow_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_setOutput_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_setInput_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_readDigital_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_readAnalog_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-void register_Test_send_bridge_timer_start_listener(void (*_listener)(struct Test_Instance*, uint8_t, int16_t));
-void register_Test_send_bridge_timer_cancel_listener(void (*_listener)(struct Test_Instance*, uint8_t));
-
-// Definition of the states:
-#define TEST_TESTCHART_STATE 0
-#define TEST_TESTCHART_INIT_STATE 1
-#define TEST_TESTCHART_BLINK_STATE 2
-
-/*****************************************************************************
- * Implementation for type : Test
- *****************************************************************************/
-
-// Declaration of prototypes:
-#ifdef EXTERN_C_PROTOTYPES
-extern "C" {
-#endif
-void Test_testChart_OnExit(int state, struct Test_Instance *_instance);
-void Test_send_bridge_setDigitalHigh(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_setDigitalLow(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_setOutput(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_setInput(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_readDigital(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_readAnalog(struct Test_Instance *_instance, uint8_t pin);
-void Test_send_bridge_timer_start(struct Test_Instance *_instance, uint8_t id, int16_t time);
-void Test_send_bridge_timer_cancel(struct Test_Instance *_instance, uint8_t id);
-#ifdef EXTERN_C_PROTOTYPES
-}
-#endif
-
-// Declaration of functions:
-
-// On Entry Actions:
-void Test_testChart_OnEntry(int state, struct Test_Instance *_instance) {
-switch(state) {
-case TEST_TESTCHART_STATE:
-_instance->Test_testChart_State = TEST_TESTCHART_INIT_STATE;
-Test_testChart_OnEntry(_instance->Test_testChart_State, _instance);
-break;
-case TEST_TESTCHART_INIT_STATE:
-{
-// PRINT: "Test Init"
-}
-break;
-case TEST_TESTCHART_BLINK_STATE:
-{
-// PRINT: "Blink"
-Test_send_bridge_timer_start(_instance, _instance->Test_timerID__var, _instance->Test_time__var);
-if(_instance->Test_On__var) {
-Test_send_bridge_setDigitalLow(_instance, _instance->Test_Led__var);
-}
-if( !(_instance->Test_On__var)) {
-Test_send_bridge_setDigitalHigh(_instance, _instance->Test_Led__var);
-}
-_instance->Test_On__var =  !(_instance->Test_On__var);
-}
-break;
-default: break;
-}
-}
-
-// On Exit Actions:
-void Test_testChart_OnExit(int state, struct Test_Instance *_instance) {
-switch(state) {
-case TEST_TESTCHART_STATE:
-Test_testChart_OnExit(_instance->Test_testChart_State, _instance);
-break;
-case TEST_TESTCHART_INIT_STATE:
-break;
-case TEST_TESTCHART_BLINK_STATE:
-break;
-default: break;
-}
-}
-
-// Event Handlers for incoming messages:
-void Test_handle_bridge_CPUBridgeReady(struct Test_Instance *_instance) {
-uint8_t Test_testChart_State_event_consumed = 0;
-if (_instance->Test_testChart_State == TEST_TESTCHART_INIT_STATE) {
-if (Test_testChart_State_event_consumed == 0 && 1) {
-Test_testChart_OnExit(TEST_TESTCHART_INIT_STATE, _instance);
-_instance->Test_testChart_State = TEST_TESTCHART_BLINK_STATE;
-{
-Test_send_bridge_setOutput(_instance, _instance->Test_Led__var);
-}
-Test_testChart_OnEntry(TEST_TESTCHART_BLINK_STATE, _instance);
-Test_testChart_State_event_consumed = 1;
-}
-}
-}
-void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id) {
-uint8_t Test_testChart_State_event_consumed = 0;
-if (_instance->Test_testChart_State == TEST_TESTCHART_BLINK_STATE) {
-if (Test_testChart_State_event_consumed == 0 && 1) {
-Test_testChart_OnExit(TEST_TESTCHART_BLINK_STATE, _instance);
-_instance->Test_testChart_State = TEST_TESTCHART_BLINK_STATE;
-Test_testChart_OnEntry(TEST_TESTCHART_BLINK_STATE, _instance);
-Test_testChart_State_event_consumed = 1;
-}
-}
-}
-
-// Observers for outgoing messages:
-void (*Test_send_bridge_setDigitalHigh_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_setDigitalHigh_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_setDigitalHigh_listener = _listener;
-}
-void Test_send_bridge_setDigitalHigh(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_setDigitalHigh_listener != 0x0) Test_send_bridge_setDigitalHigh_listener(_instance, pin);
-}
-void (*Test_send_bridge_setDigitalLow_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_setDigitalLow_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_setDigitalLow_listener = _listener;
-}
-void Test_send_bridge_setDigitalLow(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_setDigitalLow_listener != 0x0) Test_send_bridge_setDigitalLow_listener(_instance, pin);
-}
-void (*Test_send_bridge_setOutput_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_setOutput_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_setOutput_listener = _listener;
-}
-void Test_send_bridge_setOutput(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_setOutput_listener != 0x0) Test_send_bridge_setOutput_listener(_instance, pin);
-}
-void (*Test_send_bridge_setInput_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_setInput_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_setInput_listener = _listener;
-}
-void Test_send_bridge_setInput(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_setInput_listener != 0x0) Test_send_bridge_setInput_listener(_instance, pin);
-}
-void (*Test_send_bridge_readDigital_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_readDigital_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_readDigital_listener = _listener;
-}
-void Test_send_bridge_readDigital(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_readDigital_listener != 0x0) Test_send_bridge_readDigital_listener(_instance, pin);
-}
-void (*Test_send_bridge_readAnalog_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_readAnalog_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_readAnalog_listener = _listener;
-}
-void Test_send_bridge_readAnalog(struct Test_Instance *_instance, uint8_t pin){
-if (Test_send_bridge_readAnalog_listener != 0x0) Test_send_bridge_readAnalog_listener(_instance, pin);
-}
-void (*Test_send_bridge_timer_start_listener)(struct Test_Instance*, uint8_t, int16_t)= 0x0;
-void register_Test_send_bridge_timer_start_listener(void (*_listener)(struct Test_Instance*, uint8_t, int16_t)){
-Test_send_bridge_timer_start_listener = _listener;
-}
-void Test_send_bridge_timer_start(struct Test_Instance *_instance, uint8_t id, int16_t time){
-if (Test_send_bridge_timer_start_listener != 0x0) Test_send_bridge_timer_start_listener(_instance, id, time);
-}
-void (*Test_send_bridge_timer_cancel_listener)(struct Test_Instance*, uint8_t)= 0x0;
-void register_Test_send_bridge_timer_cancel_listener(void (*_listener)(struct Test_Instance*, uint8_t)){
-Test_send_bridge_timer_cancel_listener = _listener;
-}
-void Test_send_bridge_timer_cancel(struct Test_Instance *_instance, uint8_t id){
-if (Test_send_bridge_timer_cancel_listener != 0x0) Test_send_bridge_timer_cancel_listener(_instance, id);
-}
-
 
 /*****************************************************************************
  * Definitions for configuration : TestCfg
@@ -1097,283 +550,19 @@ void * _fifo_dequeue_ptr() {
 */
 //Declaration of instance variables
 struct LinuxSerial_Instance TestCfg_sp_var;
-struct Test_Instance TestCfg_t_var;
-struct Bridge_Instance TestCfg_bridge_var;
+struct MinTest_Instance TestCfg_t_var;
 
-// Enqueue of messages Bridge::Serial1::readDigitalResponse
-void enqueue_Bridge_send_Serial1_readDigitalResponse(struct Bridge_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if ( fifo_byte_available() > 6 ) {
 
-_fifo_enqueue( (1 >> 8) & 0xFF );
-_fifo_enqueue( 1 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-
-// parameter DigitalState
-_fifo_enqueue(DigitalState & 0xFF);
+// Dispatch for messages LinuxSerial::serial::serial_opened
+void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
+if (_instance == &TestCfg_sp_var) {
+MinTest_handle_serial_serial_opened(&TestCfg_t_var);
 }
 }
-// Enqueue of messages Bridge::Serial1::readAnalogResponse
-void enqueue_Bridge_send_Serial1_readAnalogResponse(struct Bridge_Instance *_instance, uint8_t pin, int res){
-if ( fifo_byte_available() > 7 ) {
-
-_fifo_enqueue( (2 >> 8) & 0xFF );
-_fifo_enqueue( 2 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-
-// parameter res
-_fifo_enqueue((res>>8) & 0xFF);
-_fifo_enqueue(res & 0xFF);
-}
-}
-// Enqueue of messages Bridge::Serial1::CPUBridgeReady
-void enqueue_Bridge_send_Serial1_CPUBridgeReady(struct Bridge_Instance *_instance){
-if ( fifo_byte_available() > 4 ) {
-
-_fifo_enqueue( (3 >> 8) & 0xFF );
-_fifo_enqueue( 3 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-}
-}
-// Enqueue of messages Bridge::Serial1::timeout
-void enqueue_Bridge_send_Serial1_timeout(struct Bridge_Instance *_instance, uint8_t id){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (4 >> 8) & 0xFF );
-_fifo_enqueue( 4 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter id
-_fifo_enqueue(id & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::setDigitalHigh
-void enqueue_Test_send_bridge_setDigitalHigh(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (5 >> 8) & 0xFF );
-_fifo_enqueue( 5 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::readAnalog
-void enqueue_Test_send_bridge_readAnalog(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (6 >> 8) & 0xFF );
-_fifo_enqueue( 6 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::readDigital
-void enqueue_Test_send_bridge_readDigital(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (7 >> 8) & 0xFF );
-_fifo_enqueue( 7 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::setOutput
-void enqueue_Test_send_bridge_setOutput(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (8 >> 8) & 0xFF );
-_fifo_enqueue( 8 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::setInput
-void enqueue_Test_send_bridge_setInput(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (9 >> 8) & 0xFF );
-_fifo_enqueue( 9 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::timer_start
-void enqueue_Test_send_bridge_timer_start(struct Test_Instance *_instance, uint8_t id, int16_t time){
-if ( fifo_byte_available() > 7 ) {
-
-_fifo_enqueue( (10 >> 8) & 0xFF );
-_fifo_enqueue( 10 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter id
-_fifo_enqueue(id & 0xFF);
-
-// parameter time
-_fifo_enqueue((time>>8) & 0xFF);
-_fifo_enqueue(time & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::timer_cancel
-void enqueue_Test_send_bridge_timer_cancel(struct Test_Instance *_instance, uint8_t id){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (11 >> 8) & 0xFF );
-_fifo_enqueue( 11 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter id
-_fifo_enqueue(id & 0xFF);
-}
-}
-// Enqueue of messages Test::bridge::setDigitalLow
-void enqueue_Test_send_bridge_setDigitalLow(struct Test_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (12 >> 8) & 0xFF );
-_fifo_enqueue( 12 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-
-// Dispatch for messages Test::bridge::setDigitalHigh
-void dispatch_Test_send_bridge_setDigitalHigh(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_setDigitalHigh(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Test::bridge::readAnalog
-void dispatch_Test_send_bridge_readAnalog(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_readAnalog(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Test::bridge::readDigital
-void dispatch_Test_send_bridge_readDigital(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_readDigital(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Test::bridge::setOutput
-void dispatch_Test_send_bridge_setOutput(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_setOutput(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Test::bridge::setInput
-void dispatch_Test_send_bridge_setInput(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_setInput(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Test::bridge::timer_start
-void dispatch_Test_send_bridge_timer_start(struct Test_Instance *_instance, uint8_t id, int16_t time){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_timer_start(&TestCfg_bridge_var, id, time);
-}
-}
-// Dispatch for messages Test::bridge::timer_cancel
-void dispatch_Test_send_bridge_timer_cancel(struct Test_Instance *_instance, uint8_t id){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_timer_cancel(&TestCfg_bridge_var, id);
-}
-}
-// Dispatch for messages Test::bridge::setDigitalLow
-void dispatch_Test_send_bridge_setDigitalLow(struct Test_Instance *_instance, uint8_t pin){
-if (_instance == &TestCfg_t_var) {
-Bridge_handle_Serial1_setDigitalLow(&TestCfg_bridge_var, pin);
-}
-}
-// Dispatch for messages Bridge::Serial1::readDigitalResponse
-void dispatch_Bridge_send_Serial1_readDigitalResponse(struct Bridge_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
-// Dispatch for messages Bridge::Serial1::readAnalogResponse
-void dispatch_Bridge_send_Serial1_readAnalogResponse(struct Bridge_Instance *_instance, uint8_t pin, int res){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
-// Dispatch for messages Bridge::Serial1::CPUBridgeReady
-void dispatch_Bridge_send_Serial1_CPUBridgeReady(struct Bridge_Instance *_instance){
-if (_instance == &TestCfg_bridge_var) {
-Test_handle_bridge_CPUBridgeReady(&TestCfg_t_var);
-}
-}
-// Dispatch for messages Bridge::Serial1::timeout
-void dispatch_Bridge_send_Serial1_timeout(struct Bridge_Instance *_instance, uint8_t id){
-if (_instance == &TestCfg_bridge_var) {
-Test_handle_bridge_timeout(&TestCfg_t_var, id);
-}
-}
-// Dispatch for messages Bridge::serial::serial_close
-void dispatch_Bridge_send_serial_serial_close(struct Bridge_Instance *_instance){
-if (_instance == &TestCfg_bridge_var) {
-}
-}
-// Dispatch for messages Bridge::serial::serial_open
-void dispatch_Bridge_send_serial_serial_open(struct Bridge_Instance *_instance, char * device, int baudrate){
-if (_instance == &TestCfg_bridge_var) {
-LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
-}
-}
-// Dispatch for messages Bridge::serial::serial_tx
-void dispatch_Bridge_send_serial_serial_tx(struct Bridge_Instance *_instance, uint8_t b){
-if (_instance == &TestCfg_bridge_var) {
-LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
+// Dispatch for messages LinuxSerial::serial::serial_rx
+void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
+if (_instance == &TestCfg_sp_var) {
+MinTest_handle_serial_serial_rx(&TestCfg_t_var, b);
 }
 }
 // Dispatch for messages LinuxSerial::serial::serial_closed
@@ -1381,23 +570,28 @@ void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance 
 if (_instance == &TestCfg_sp_var) {
 }
 }
-// Dispatch for messages LinuxSerial::serial::serial_opened
-void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
-if (_instance == &TestCfg_sp_var) {
-Bridge_handle_serial_serial_opened(&TestCfg_bridge_var);
+// Dispatch for messages MinTest::serial::serial_open
+void dispatch_MinTest_send_serial_serial_open(struct MinTest_Instance *_instance, char * device, int baudrate){
+if (_instance == &TestCfg_t_var) {
+LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
 }
 }
-// Dispatch for messages LinuxSerial::serial::serial_rx
-void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
-if (_instance == &TestCfg_sp_var) {
-Bridge_handle_serial_serial_rx(&TestCfg_bridge_var, b);
+// Dispatch for messages MinTest::serial::serial_close
+void dispatch_MinTest_send_serial_serial_close(struct MinTest_Instance *_instance){
+if (_instance == &TestCfg_t_var) {
+}
+}
+// Dispatch for messages MinTest::serial::serial_tx
+void dispatch_MinTest_send_serial_serial_tx(struct MinTest_Instance *_instance, uint8_t b){
+if (_instance == &TestCfg_t_var) {
+LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
 }
 }
 
 void processMessageQueue() {
 if (fifo_empty()) return; // return if there is nothing to do
 
-byte mbuf[5];
+byte mbuf[2];
 uint8_t mbufi = 0;
 
 // Read the code of the next port/message in the queue
@@ -1407,100 +601,17 @@ code += fifo_dequeue();
 
 // Switch to call the appropriate handler
 switch(code) {
-case 5:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_setDigitalHigh((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 6:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_readAnalog((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 7:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_readDigital((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 8:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_setOutput((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 9:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_setInput((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 10:
-while (mbufi < 5) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_timer_start((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* id */ ,
-(mbuf[3]<<8) + mbuf[4] /* time */ );
-break;
-case 11:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_timer_cancel((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* id */ );
-break;
-case 12:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Test_send_bridge_setDigitalLow((struct Test_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 1:
-while (mbufi < 4) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_readDigitalResponse((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ ,
-mbuf[3] /* DigitalState */ );
-break;
-case 2:
-while (mbufi < 5) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_readAnalogResponse((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ ,
-(mbuf[3]<<8) + mbuf[4] /* res */ );
-break;
-case 3:
-while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_CPUBridgeReady((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
-break;
-case 4:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_timeout((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* id */ );
-break;
 }
 }
 
 void initialize_configuration_TestCfg() {
 // Initialize connectors
-register_Bridge_send_Serial1_readDigitalResponse_listener(enqueue_Bridge_send_Serial1_readDigitalResponse);
-register_Bridge_send_Serial1_readAnalogResponse_listener(enqueue_Bridge_send_Serial1_readAnalogResponse);
-register_Bridge_send_Serial1_timeout_listener(enqueue_Bridge_send_Serial1_timeout);
-register_Bridge_send_Serial1_CPUBridgeReady_listener(enqueue_Bridge_send_Serial1_CPUBridgeReady);
-register_Bridge_send_serial_serial_open_listener(dispatch_Bridge_send_serial_serial_open);
-register_Bridge_send_serial_serial_close_listener(dispatch_Bridge_send_serial_serial_close);
-register_Bridge_send_serial_serial_tx_listener(dispatch_Bridge_send_serial_serial_tx);
+register_MinTest_send_serial_serial_open_listener(dispatch_MinTest_send_serial_serial_open);
+register_MinTest_send_serial_serial_close_listener(dispatch_MinTest_send_serial_serial_close);
+register_MinTest_send_serial_serial_tx_listener(dispatch_MinTest_send_serial_serial_tx);
 register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_serial_serial_rx);
 register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
 register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
-register_Test_send_bridge_setDigitalHigh_listener(enqueue_Test_send_bridge_setDigitalHigh);
-register_Test_send_bridge_setDigitalLow_listener(enqueue_Test_send_bridge_setDigitalLow);
-register_Test_send_bridge_setOutput_listener(enqueue_Test_send_bridge_setOutput);
-register_Test_send_bridge_setInput_listener(enqueue_Test_send_bridge_setInput);
-register_Test_send_bridge_readDigital_listener(enqueue_Test_send_bridge_readDigital);
-register_Test_send_bridge_readAnalog_listener(enqueue_Test_send_bridge_readAnalog);
-register_Test_send_bridge_timer_start_listener(enqueue_Test_send_bridge_timer_start);
-register_Test_send_bridge_timer_cancel_listener(enqueue_Test_send_bridge_timer_cancel);
-
-// Init the ID, state variables and properties for instance TestCfg_bridge
-TestCfg_bridge_var.id = add_instance( (void*) &TestCfg_bridge_var);
-TestCfg_bridge_var.Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
-TestCfg_bridge_var.Bridge_BridgeChart_Active_State = BRIDGE_BRIDGECHART_ACTIVE_IDLE_STATE;
-TestCfg_bridge_var.Bridge_START_BYTE__var = 18;
-TestCfg_bridge_var.Bridge_STOP_BYTE__var = 19;
-TestCfg_bridge_var.Bridge_ESCAPE_BYTE__var = 125;
-TestCfg_bridge_var.Bridge_MsgSize__var = 0;
 
 // Init the ID, state variables and properties for instance TestCfg_sp
 TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
@@ -1508,15 +619,10 @@ TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_R
 
 // Init the ID, state variables and properties for instance TestCfg_t
 TestCfg_t_var.id = add_instance( (void*) &TestCfg_t_var);
-TestCfg_t_var.Test_testChart_State = TEST_TESTCHART_INIT_STATE;
-TestCfg_t_var.Test_On__var = 0;
-TestCfg_t_var.Test_time__var = 500;
-TestCfg_t_var.Test_timerID__var = 0;
-TestCfg_t_var.Test_Led__var = 13;
+TestCfg_t_var.MinTest_TestChart_State = MINTEST_TESTCHART_INIT_STATE;
 
+MinTest_TestChart_OnEntry(MINTEST_TESTCHART_STATE, &TestCfg_t_var);
 LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
-Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &TestCfg_bridge_var);
-Test_testChart_OnEntry(TEST_TESTCHART_STATE, &TestCfg_t_var);
 }
 
 /*****************************************************************************
@@ -1529,7 +635,6 @@ initialize_configuration_TestCfg();
 }
 
 void loop() {
-Bridge_handle_empty_event(&TestCfg_bridge_var);
 
 processMessageQueue();
 }

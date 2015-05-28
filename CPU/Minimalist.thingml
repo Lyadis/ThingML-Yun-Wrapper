@@ -2,12 +2,12 @@ import "LinuxSerial.thingml"
 
 configuration MinTestCfg {
 	instance sp : LinuxSerial
-	instance t : test
+	instance t : MinTest
 	
 	connector sp.serial => t.serial
 }
 
-thing test includes SerialClientPort {
+thing MinTest includes SerialClientPort {
 	statechart TestChart init Init {
 		state Init {
 			on entry do
