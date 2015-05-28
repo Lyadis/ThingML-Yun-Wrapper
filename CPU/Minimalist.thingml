@@ -25,7 +25,9 @@ thing test includes SerialClientPort {
 			end
 			
 			internal event e : serial?serial_rx action do
-				print '[Test] rx: \"'& e.b &'\"\n'
+				print "[Test] rx: \""
+				print e.b
+				print "\"\n"
 			end
 		}
 	}
