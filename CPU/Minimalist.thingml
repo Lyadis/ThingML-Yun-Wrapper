@@ -11,7 +11,7 @@ thing test includes SerialClientPort {
 	statechart TestChart init Init {
 		state Init {
 			on entry do
-				print "[Test] Start\n"
+				print "[Test] Start "
 				serial!serial_open("/dev/ttyATH0", 115200)
 			end
 			
@@ -20,14 +20,14 @@ thing test includes SerialClientPort {
 		
 		state Parle {
 			on entry do
-				print "[Test] Parle\n"
-				serial!serial_tx('0xff')
+				print "[Test] Parle "
+				serial!serial_tx(255)
 			end
 			
 			internal event e : serial?serial_rx action do
-				print "[Test] rx: \""
+				print "[Test] rx: '"
 				print e.b
-				print "\"\n"
+				print "' "
 			end
 		}
 	}
