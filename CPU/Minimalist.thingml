@@ -1,0 +1,32 @@
+import "LinuxSerial.thingml"
+
+configuration MinTestCfg {
+	instance sp : LinuxSerial
+	instance t : test
+	
+	connector sp.serial => t.serial
+}
+
+thing test includes SerialClientPort {
+	statechart TestChart init Init {
+		state Init {
+			on entry do
+				print "[Test] Start\n"
+				serial!serial_open("/dev/ttyATH0", 115200)
+			end
+			
+			transition -> Parle event e : serial?serial_opened
+		}
+		
+		state Parle {
+			on entry do
+				print "[Test] Parle\n"
+				serial!serial_tx('0xff')
+			end
+			
+			internal event e : serial?serial_rx action do
+				print '[Test] rx: \"'& e.b &'\"\n'
+			end
+		}
+	}
+}

@@ -76,7 +76,7 @@ thing Bridge includes BridgeMsgs, SerialClientPort, ReadyMsg {
 				serial!serial_open("/dev/ttyATH0", 115200)
 			end
 			
-			transition -> Active action do
+			transition -> Active event e : serial?serial_opened action do
 				Serial1!CPUBridgeReady()
 			end
 		}
