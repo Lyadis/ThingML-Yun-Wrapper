@@ -124,7 +124,7 @@ char buffer[INPUT_BUFFER_SIZE]; // Data read from the ESUSMS device
 				break;
 			}
 			else { // there is something to read
-	
+				printf("[receiver] rx?\n");
 				n = read(device, &buffer, INPUT_BUFFER_SIZE * sizeof(char));
 	
 				if (n<0) {
@@ -136,11 +136,13 @@ char buffer[INPUT_BUFFER_SIZE]; // Data read from the ESUSMS device
 					break;
 				}
 				else { // There are n incoming bytes in buffer
-	
+					printf("[receiver] rx! <%i>\n", n);
 					char c;
 					int size;
 	
 					for (i = 0; i<n; i++) {
+						
+						printf("[receiver] rx:<%i>\n", buffer[i]);
 						
 LinuxSerial_send_serial_serial_rx(_instance, buffer[i]);
 
@@ -224,7 +226,7 @@ uint8_t LinuxSerial_LinuxSerialImpl_State_event_consumed = 0;
 if (_instance->LinuxSerial_LinuxSerialImpl_State == LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE) {
 if (LinuxSerial_LinuxSerialImpl_State_event_consumed == 0 && 1) {
 {
-fprintf(stdout, "writing");
+fprintf(stdout, "[LinuxSerial] writing\n");
 
 f_LinuxSerial_send_byte(_instance, _instance->LinuxSerial_LinuxSerialImpl_serial_device__var, b);
 }
@@ -237,10 +239,18 @@ uint8_t LinuxSerial_LinuxSerialImpl_State_event_consumed = 0;
 if (_instance->LinuxSerial_LinuxSerialImpl_State == LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE) {
 if (LinuxSerial_LinuxSerialImpl_State_event_consumed == 0 && 1) {
 {
+fprintf(stdout, "[LinuxSerial] received serial_open\n");
+
 _instance->LinuxSerial_LinuxSerialImpl_serial_device__var = f_LinuxSerial_open_serial(_instance, device, baudrate);
 if(_instance->LinuxSerial_LinuxSerialImpl_serial_device__var >  -1) {
+fprintf(stdout, "[LinuxSerial] suceed to open\n");
+
 f_LinuxSerial_start_receiver_process(_instance, _instance->LinuxSerial_LinuxSerialImpl_serial_device__var);
+fprintf(stdout, "[LinuxSerial] started receiver process\n");
+
 LinuxSerial_send_serial_serial_opened(_instance);
+fprintf(stdout, "[LinuxSerial] opened\n");
+
 }
 }
 LinuxSerial_LinuxSerialImpl_State_event_consumed = 1;

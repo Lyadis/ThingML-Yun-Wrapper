@@ -26,10 +26,32 @@
  *****************************************************************************/
 
 //Declaration of instance variables
-struct MinTest_Instance TestCfg_t_var;
 struct LinuxSerial_Instance TestCfg_sp_var;
+struct MinTest_Instance TestCfg_t_var;
 
 
+// Dispatch for messages LinuxSerial::serial::serial_opened
+void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
+if (_instance == &TestCfg_sp_var) {
+MinTest_handle_serial_serial_opened(&TestCfg_t_var);
+}
+}
+// Dispatch for messages LinuxSerial::serial::serial_closed
+void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
+if (_instance == &TestCfg_sp_var) {
+}
+}
+// Dispatch for messages LinuxSerial::serial::serial_rx
+void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
+if (_instance == &TestCfg_sp_var) {
+MinTest_handle_serial_serial_rx(&TestCfg_t_var, b);
+}
+}
+// Dispatch for messages MinTest::serial::serial_close
+void dispatch_MinTest_send_serial_serial_close(struct MinTest_Instance *_instance){
+if (_instance == &TestCfg_t_var) {
+}
+}
 // Dispatch for messages MinTest::serial::serial_tx
 void dispatch_MinTest_send_serial_serial_tx(struct MinTest_Instance *_instance, uint8_t b){
 if (_instance == &TestCfg_t_var) {
@@ -40,28 +62,6 @@ LinuxSerial_handle_serial_serial_tx(&TestCfg_sp_var, b);
 void dispatch_MinTest_send_serial_serial_open(struct MinTest_Instance *_instance, char * device, int baudrate){
 if (_instance == &TestCfg_t_var) {
 LinuxSerial_handle_serial_serial_open(&TestCfg_sp_var, device, baudrate);
-}
-}
-// Dispatch for messages MinTest::serial::serial_close
-void dispatch_MinTest_send_serial_serial_close(struct MinTest_Instance *_instance){
-if (_instance == &TestCfg_t_var) {
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_rx
-void dispatch_LinuxSerial_send_serial_serial_rx(struct LinuxSerial_Instance *_instance, uint8_t b){
-if (_instance == &TestCfg_sp_var) {
-MinTest_handle_serial_serial_rx(&TestCfg_t_var, b);
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_opened
-void dispatch_LinuxSerial_send_serial_serial_opened(struct LinuxSerial_Instance *_instance){
-if (_instance == &TestCfg_sp_var) {
-MinTest_handle_serial_serial_opened(&TestCfg_t_var);
-}
-}
-// Dispatch for messages LinuxSerial::serial::serial_closed
-void dispatch_LinuxSerial_send_serial_serial_closed(struct LinuxSerial_Instance *_instance){
-if (_instance == &TestCfg_sp_var) {
 }
 }
 
@@ -83,23 +83,23 @@ switch(code) {
 
 void initialize_configuration_TestCfg() {
 // Initialize connectors
-register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_serial_serial_rx);
-register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
-register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
 register_MinTest_send_serial_serial_open_listener(dispatch_MinTest_send_serial_serial_open);
 register_MinTest_send_serial_serial_close_listener(dispatch_MinTest_send_serial_serial_close);
 register_MinTest_send_serial_serial_tx_listener(dispatch_MinTest_send_serial_serial_tx);
-
-// Init the ID, state variables and properties for instance TestCfg_t
-TestCfg_t_var.id = add_instance( (void*) &TestCfg_t_var);
-TestCfg_t_var.MinTest_TestChart_State = MINTEST_TESTCHART_INIT_STATE;
+register_LinuxSerial_send_serial_serial_rx_listener(dispatch_LinuxSerial_send_serial_serial_rx);
+register_LinuxSerial_send_serial_serial_closed_listener(dispatch_LinuxSerial_send_serial_serial_closed);
+register_LinuxSerial_send_serial_serial_opened_listener(dispatch_LinuxSerial_send_serial_serial_opened);
 
 // Init the ID, state variables and properties for instance TestCfg_sp
 TestCfg_sp_var.id = add_instance( (void*) &TestCfg_sp_var);
 TestCfg_sp_var.LinuxSerial_LinuxSerialImpl_State = LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE;
 
-MinTest_TestChart_OnEntry(MINTEST_TESTCHART_STATE, &TestCfg_t_var);
+// Init the ID, state variables and properties for instance TestCfg_t
+TestCfg_t_var.id = add_instance( (void*) &TestCfg_t_var);
+TestCfg_t_var.MinTest_TestChart_State = MINTEST_TESTCHART_INIT_STATE;
+
 LinuxSerial_LinuxSerialImpl_OnEntry(LINUXSERIAL_LINUXSERIALIMPL_STATE, &TestCfg_sp_var);
+MinTest_TestChart_OnEntry(MINTEST_TESTCHART_STATE, &TestCfg_t_var);
 }
 
 

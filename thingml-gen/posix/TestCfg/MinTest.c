@@ -33,15 +33,18 @@ MinTest_TestChart_OnEntry(_instance->MinTest_TestChart_State, _instance);
 break;
 case MINTEST_TESTCHART_INIT_STATE:
 {
-fprintf(stdout, "[Test] Start ");
+fprintf(stdout, "[Test] Start \n");
 
-MinTest_send_serial_serial_open(_instance, "/dev/ttyATH0", 115200);
+MinTest_send_serial_serial_open(_instance, "/dev/ttyACM0", 115200);
 }
 break;
 case MINTEST_TESTCHART_PARLE_STATE:
 {
-fprintf(stdout, "[Test] Parle ");
+fprintf(stdout, "[Test] Parle \n");
 
+MinTest_send_serial_serial_tx(_instance, 255);
+MinTest_send_serial_serial_tx(_instance, 255);
+MinTest_send_serial_serial_tx(_instance, 255);
 MinTest_send_serial_serial_tx(_instance, 255);
 }
 break;
@@ -80,11 +83,7 @@ uint8_t MinTest_TestChart_State_event_consumed = 0;
 if (_instance->MinTest_TestChart_State == MINTEST_TESTCHART_PARLE_STATE) {
 if (MinTest_TestChart_State_event_consumed == 0 && 1) {
 {
-fprintf(stdout, "[Test] rx: \'");
-
-fprintf(stdout, b);
-
-fprintf(stdout, "\' ");
+printf("[Test] rx: <%i>\n", b);
 
 }
 MinTest_TestChart_State_event_consumed = 1;

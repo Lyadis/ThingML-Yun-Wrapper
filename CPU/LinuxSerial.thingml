@@ -104,7 +104,7 @@ thing LinuxSerial includes Serial
 				break;
 			}
 			else { // there is something to read
-	
+				printf("[receiver] rx?\n");
 				n = read('& device &', &buffer, INPUT_BUFFER_SIZE * sizeof(char));
 	
 				if (n<0) {
@@ -116,11 +116,13 @@ thing LinuxSerial includes Serial
 					break;
 				}
 				else { // There are n incoming bytes in buffer
-	
+					printf("[receiver] rx! <%i>\n", n);
 					char c;
 					int size;
 	
 					for (i = 0; i<n; i++) {
+						
+						printf("[receiver] rx:<%i>\n", buffer[i]);
 						'serial!serial_rx('buffer[i]')'
 					}
 				}
@@ -137,16 +139,20 @@ thing LinuxSerial includes Serial
 				
 			internal event m : serial?serial_open
 			action do 
+				print "[LinuxSerial] received serial_open\n"
 				serial_device = open_serial(m.device, m.baudrate)
 				if (serial_device > -1) do
+					print "[LinuxSerial] suceed to open\n"
                     start_receiver_process(serial_device)
+					print "[LinuxSerial] started receiver process\n"
 	    			serial!serial_opened()
+					print "[LinuxSerial] opened\n"
 	    		end
 			end
 			
 			internal event c : serial?serial_tx
 			action do 
-				print "writing"
+				print "[LinuxSerial] writing\n"
 				send_byte(serial_device, c.b)
 			end
 		}

@@ -1,22 +1,22 @@
 import "Bridge.thingml"
 
 configuration TestCfg {
-	//instance bridge : Bridge
+	instance bridge : Bridge
 	instance sp : LinuxSerial
-	//instance t : Test
-	instance t : MinTest
+	instance t : Test
+	//instance t : MinTest
 	
-	connector sp.serial => t.serial
-	//connector sp.serial => bridge.serial
-	//connector t.bridge => bridge.Serial1
+	//connector sp.serial => t.serial
+	connector sp.serial => bridge.serial
+	connector t.bridge => bridge.Serial1
 }
 
 thing MinTest includes SerialClientPort {
 	statechart TestChart init Init {
 		state Init {
 			on entry do
-				print "[Test] Start "
-				serial!serial_open("/dev/ttyATH0", 115200)
+				print "[Test] Start \n"
+				serial!serial_open("/dev/ttyACM0", 115200)
 			end
 			
 			transition -> Parle event e : serial?serial_opened
@@ -24,14 +24,17 @@ thing MinTest includes SerialClientPort {
 		
 		state Parle {
 			on entry do
-				print "[Test] Parle "
+				print "[Test] Parle \n"
+				serial!serial_tx(255)
+				serial!serial_tx(255)
+				serial!serial_tx(255)
 				serial!serial_tx(255)
 			end
 			
 			internal event e : serial?serial_rx action do
-				print "[Test] rx: '"
-				print e.b
-				print "' "
+				print "[Test] rx: <"
+				//print e.b
+				print ">\n"
 			end
 		}
 	}
