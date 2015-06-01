@@ -153,8 +153,8 @@ thing LinuxSerial includes Serial
 			
 			internal event c : serial?serial_tx
 			action do 
-				'printf( "[LinuxSerial] wrote<%i>\n", '& c.b &');'
 				send_byte(serial_device, c.b)
+				'printf( "[LinuxSerial] wrote<%i>\n", '& c.b &');'
 			end
 		}
 		
