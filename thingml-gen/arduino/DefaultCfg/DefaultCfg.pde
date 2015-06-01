@@ -17,524 +17,6 @@
 #define DIGITALSTATE_HIGH 1
 
 /*****************************************************************************
- * Headers for type : Bridge
- *****************************************************************************/
-
-
-// BEGIN: Code from the c_header annotation Bridge
-
-#include <SoftwareSerial.h>
-#include "/home/sintef/Documents/ArduinoSerialForward/YunBridge/ArduinoSerialForward.h" 
-// END: Code from the c_header annotation Bridge
-
-// Definition of the instance stuct:
-struct Bridge_Instance {
-// Variables for the ID of the instance
-int id;
-// Variables for the current instance state
-int Bridge_BridgeChart_State;
-// Variables for the properties of the instance
-};
-
-// Declaration of prototypes outgoing messages:
-void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance);
-// Declaration of callbacks for incomming messages:
-void register_Bridge_send_Serial1_setDigitalHigh_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_setDigitalLow_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_setOutput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_setInput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_readDigital_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_readAnalog_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-void register_Bridge_send_Serial1_timer_start_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int16_t));
-void register_Bridge_send_Serial1_timer_cancel_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
-
-// Definition of the states:
-#define BRIDGE_BRIDGECHART_STATE 0
-#define BRIDGE_BRIDGECHART_INIT_STATE 1
-
-/*****************************************************************************
- * Implementation for type : Bridge
- *****************************************************************************/
-
-// Declaration of prototypes:
-#ifdef EXTERN_C_PROTOTYPES
-extern "C" {
-#endif
-void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance);
-void Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_send_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time);
-void Bridge_send_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id);
-#ifdef EXTERN_C_PROTOTYPES
-}
-#endif
-
-// Declaration of functions:
-
-// On Entry Actions:
-void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance) {
-switch(state) {
-case BRIDGE_BRIDGECHART_STATE:
-_instance->Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
-Bridge_BridgeChart_OnEntry(_instance->Bridge_BridgeChart_State, _instance);
-break;
-case BRIDGE_BRIDGECHART_INIT_STATE:
-break;
-default: break;
-}
-}
-
-// On Exit Actions:
-void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance) {
-switch(state) {
-case BRIDGE_BRIDGECHART_STATE:
-Bridge_BridgeChart_OnExit(_instance->Bridge_BridgeChart_State, _instance);
-break;
-case BRIDGE_BRIDGECHART_INIT_STATE:
-break;
-default: break;
-}
-}
-
-// Event Handlers for incoming messages:
-
-// Observers for outgoing messages:
-void (*Bridge_send_Serial1_setDigitalHigh_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_setDigitalHigh_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_setDigitalHigh_listener = _listener;
-}
-void Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_setDigitalHigh_listener != 0x0) Bridge_send_Serial1_setDigitalHigh_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_setDigitalLow_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_setDigitalLow_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_setDigitalLow_listener = _listener;
-}
-void Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_setDigitalLow_listener != 0x0) Bridge_send_Serial1_setDigitalLow_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_setOutput_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_setOutput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_setOutput_listener = _listener;
-}
-void Bridge_send_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_setOutput_listener != 0x0) Bridge_send_Serial1_setOutput_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_setInput_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_setInput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_setInput_listener = _listener;
-}
-void Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_setInput_listener != 0x0) Bridge_send_Serial1_setInput_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_readDigital_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_readDigital_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_readDigital_listener = _listener;
-}
-void Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_readDigital_listener != 0x0) Bridge_send_Serial1_readDigital_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_readAnalog_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_readAnalog_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_readAnalog_listener = _listener;
-}
-void Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
-if (Bridge_send_Serial1_readAnalog_listener != 0x0) Bridge_send_Serial1_readAnalog_listener(_instance, pin);
-}
-void (*Bridge_send_Serial1_timer_start_listener)(struct Bridge_Instance*, uint8_t, int16_t)= 0x0;
-void register_Bridge_send_Serial1_timer_start_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int16_t)){
-Bridge_send_Serial1_timer_start_listener = _listener;
-}
-void Bridge_send_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time){
-if (Bridge_send_Serial1_timer_start_listener != 0x0) Bridge_send_Serial1_timer_start_listener(_instance, id, time);
-}
-void (*Bridge_send_Serial1_timer_cancel_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
-void register_Bridge_send_Serial1_timer_cancel_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
-Bridge_send_Serial1_timer_cancel_listener = _listener;
-}
-void Bridge_send_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id){
-if (Bridge_send_Serial1_timer_cancel_listener != 0x0) Bridge_send_Serial1_timer_cancel_listener(_instance, id);
-}
-
-/*****************************************************************************
- * Headers for type : ArduinoScheduler
- *****************************************************************************/
-
-
-// BEGIN: Code from the c_header annotation ArduinoScheduler
-
-#define NB_SOFT_TIMERS 4 // for 4 different timers, 0 to 3. change here to get more or less timers.
-
-// END: Code from the c_header annotation ArduinoScheduler
-
-// Definition of the instance stuct:
-struct ArduinoScheduler_Instance {
-// Variables for the ID of the instance
-int id;
-// Variables for the current instance state
-int ArduinoScheduler_ArduinoSchedulerStateChart_State;
-// Variables for the properties of the instance
-uint8_t ArduinoScheduler_interrupt_counter__var;
-long ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[NB_SOFT_TIMERS];
-long ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var;
-};
-
-// Declaration of prototypes outgoing messages:
-void ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(int state, struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_handle_polling_setup(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_handle_polling_poll(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_handle_arduino_setDigitalHigh(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_serial_print_dec(struct ArduinoScheduler_Instance *_instance, double num);
-void ArduinoScheduler_handle_arduino_serial_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num);
-void ArduinoScheduler_handle_arduino_timer_cancel(struct ArduinoScheduler_Instance *_instance, uint8_t id);
-void ArduinoScheduler_handle_arduino_readAnalog(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_serial_print_str(struct ArduinoScheduler_Instance *_instance, char * msg);
-void ArduinoScheduler_handle_arduino_usb_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num);
-void ArduinoScheduler_handle_arduino_setOutput(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_setDigitalLow(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_readDigital(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_usb_print_str(struct ArduinoScheduler_Instance *_instance, char * msg);
-void ArduinoScheduler_handle_arduino_setInput(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
-void ArduinoScheduler_handle_arduino_timer_start(struct ArduinoScheduler_Instance *_instance, uint8_t id, int16_t time);
-void ArduinoScheduler_handle_arduino_usb_print_dec(struct ArduinoScheduler_Instance *_instance, double num);
-// Declaration of callbacks for incomming messages:
-void register_ArduinoScheduler_send_arduino_ready_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
-void register_ArduinoScheduler_send_arduino_4ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
-void register_ArduinoScheduler_send_arduino_100ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
-void register_ArduinoScheduler_send_arduino_1s_poll_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
-void register_ArduinoScheduler_send_arduino_timeout_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t));
-void register_ArduinoScheduler_send_arduino_serial_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char));
-void register_ArduinoScheduler_send_arduino_usb_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char));
-void register_ArduinoScheduler_send_arduino_readDigitalResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t));
-void register_ArduinoScheduler_send_arduino_readAnalogResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, int));
-
-// Definition of the states:
-#define ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE 0
-#define ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE 1
-
-/*****************************************************************************
- * Implementation for type : ArduinoScheduler
- *****************************************************************************/
-
-
-// BEGIN: Code from the c_global annotation ArduinoScheduler
-
-struct ArduinoScheduler_Instance *_ArduinoScheduler_Instance;
-uint8_t interrupt_counter = 0;
-
-// END: Code from the c_global annotation ArduinoScheduler
-
-// Declaration of prototypes:
-#ifdef EXTERN_C_PROTOTYPES
-extern "C" {
-#endif
-void ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(int state, struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance);
-void ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id);
-void ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c);
-void ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c);
-void ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState);
-void ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res);
-void f_ArduinoScheduler_initialize_timer3(struct ArduinoScheduler_Instance *_instance);
-SIGNAL(TIMER3_OVF_vect);
-#ifdef EXTERN_C_PROTOTYPES
-}
-#endif
-
-// Declaration of functions:
-// Definition of function initialize_timer3
-void f_ArduinoScheduler_initialize_timer3(struct ArduinoScheduler_Instance *_instance) {
-{
-// Store the instance in a global variable so that the interrupt routine can use it
-		_ArduinoScheduler_Instance = _instance;
-		// Run timer3 interrupt up counting at 16MHz
-		TCCR3A = 0;
-		TCCR3B = 0<<CS32 | 0<<CS31 | 1<<CS30;
-		//Timer3 Overflow Interrupt Enable
-		TIMSK3 |= 1<<TOIE3;
-}
-}
-
-// Definition of function timer3_compare_interrupt
-SIGNAL(TIMER3_OVF_vect) {
-{
-TCNT3 = 1535;
-interrupt_counter++;
-if(interrupt_counter >= 24) {
-ArduinoScheduler_send_arduino_100ms_interrupt(_ArduinoScheduler_Instance);
-interrupt_counter=0;
-}
-ArduinoScheduler_send_arduino_4ms_interrupt(_ArduinoScheduler_Instance);
-}
-}
-
-
-// On Entry Actions:
-void ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(int state, struct ArduinoScheduler_Instance *_instance) {
-switch(state) {
-case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE:
-_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State = ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE;
-{
-Serial.begin(9600);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State, _instance);
-break;
-case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE:
-break;
-default: break;
-}
-}
-
-// On Exit Actions:
-void ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(int state, struct ArduinoScheduler_Instance *_instance) {
-switch(state) {
-case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE:
-ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State, _instance);
-break;
-case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE:
-break;
-default: break;
-}
-}
-
-// Event Handlers for incoming messages:
-void ArduinoScheduler_handle_polling_setup(struct ArduinoScheduler_Instance *_instance) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-f_ArduinoScheduler_initialize_timer3(_instance);
-_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var = millis() + 1000;
-ArduinoScheduler_send_arduino_ready(_instance);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_polling_poll(struct ArduinoScheduler_Instance *_instance) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-long tms = millis();
-uint8_t t = 0;
-while(t < NB_SOFT_TIMERS) {
-if(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] > 0 && _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] < tms) {
-_instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] = 0;
-ArduinoScheduler_send_arduino_timeout(_instance, t);
-}
-t = t + 1;
-}
-if(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var < tms) {
-_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var = _instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var + 1000;
-ArduinoScheduler_send_arduino_1s_poll(_instance);
-}
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_setDigitalHigh(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-digitalWrite(pin, HIGH);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_serial_print_dec(struct ArduinoScheduler_Instance *_instance, double num) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(num);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_serial_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(num);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_timer_cancel(struct ArduinoScheduler_Instance *_instance, uint8_t id) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-if(id < NB_SOFT_TIMERS) _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[id] = 0;
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_readAnalog(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-ArduinoScheduler_send_arduino_readAnalogResponse(_instance, pin, analogRead(pin));
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_serial_print_str(struct ArduinoScheduler_Instance *_instance, char * msg) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(msg);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_usb_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(num);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_setOutput(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-pinMode(pin,OUTPUT);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_setDigitalLow(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-digitalWrite(pin, LOW);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_readDigital(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-if((digitalRead(pin) == HIGH)) {
-ArduinoScheduler_send_arduino_readDigitalResponse(_instance, pin, DIGITALSTATE_HIGH);
-}
-if((digitalRead(pin) == LOW)) {
-ArduinoScheduler_send_arduino_readDigitalResponse(_instance, pin, DIGITALSTATE_LOW);
-}
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_usb_print_str(struct ArduinoScheduler_Instance *_instance, char * msg) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(msg);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_setInput(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-pinMode(pin,INPUT);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_timer_start(struct ArduinoScheduler_Instance *_instance, uint8_t id, int16_t time) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-if(id < NB_SOFT_TIMERS) _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[id] = millis() + time - 1;
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-void ArduinoScheduler_handle_arduino_usb_print_dec(struct ArduinoScheduler_Instance *_instance, double num) {
-uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
-if (1) {
-{
-Serial.print(num);
-}
-ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
-}
-}
-
-// Observers for outgoing messages:
-void (*ArduinoScheduler_send_arduino_ready_listener)(struct ArduinoScheduler_Instance*)= 0x0;
-void register_ArduinoScheduler_send_arduino_ready_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
-ArduinoScheduler_send_arduino_ready_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
-if (ArduinoScheduler_send_arduino_ready_listener != 0x0) ArduinoScheduler_send_arduino_ready_listener(_instance);
-}
-void (*ArduinoScheduler_send_arduino_4ms_interrupt_listener)(struct ArduinoScheduler_Instance*)= 0x0;
-void register_ArduinoScheduler_send_arduino_4ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
-ArduinoScheduler_send_arduino_4ms_interrupt_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if (ArduinoScheduler_send_arduino_4ms_interrupt_listener != 0x0) ArduinoScheduler_send_arduino_4ms_interrupt_listener(_instance);
-}
-void (*ArduinoScheduler_send_arduino_100ms_interrupt_listener)(struct ArduinoScheduler_Instance*)= 0x0;
-void register_ArduinoScheduler_send_arduino_100ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
-ArduinoScheduler_send_arduino_100ms_interrupt_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if (ArduinoScheduler_send_arduino_100ms_interrupt_listener != 0x0) ArduinoScheduler_send_arduino_100ms_interrupt_listener(_instance);
-}
-void (*ArduinoScheduler_send_arduino_1s_poll_listener)(struct ArduinoScheduler_Instance*)= 0x0;
-void register_ArduinoScheduler_send_arduino_1s_poll_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
-ArduinoScheduler_send_arduino_1s_poll_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
-if (ArduinoScheduler_send_arduino_1s_poll_listener != 0x0) ArduinoScheduler_send_arduino_1s_poll_listener(_instance);
-}
-void (*ArduinoScheduler_send_arduino_timeout_listener)(struct ArduinoScheduler_Instance*, uint8_t)= 0x0;
-void register_ArduinoScheduler_send_arduino_timeout_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t)){
-ArduinoScheduler_send_arduino_timeout_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
-if (ArduinoScheduler_send_arduino_timeout_listener != 0x0) ArduinoScheduler_send_arduino_timeout_listener(_instance, id);
-}
-void (*ArduinoScheduler_send_arduino_serial_rx_char_listener)(struct ArduinoScheduler_Instance*, char)= 0x0;
-void register_ArduinoScheduler_send_arduino_serial_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char)){
-ArduinoScheduler_send_arduino_serial_rx_char_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if (ArduinoScheduler_send_arduino_serial_rx_char_listener != 0x0) ArduinoScheduler_send_arduino_serial_rx_char_listener(_instance, c);
-}
-void (*ArduinoScheduler_send_arduino_usb_rx_char_listener)(struct ArduinoScheduler_Instance*, char)= 0x0;
-void register_ArduinoScheduler_send_arduino_usb_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char)){
-ArduinoScheduler_send_arduino_usb_rx_char_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if (ArduinoScheduler_send_arduino_usb_rx_char_listener != 0x0) ArduinoScheduler_send_arduino_usb_rx_char_listener(_instance, c);
-}
-void (*ArduinoScheduler_send_arduino_readDigitalResponse_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t)= 0x0;
-void register_ArduinoScheduler_send_arduino_readDigitalResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t)){
-ArduinoScheduler_send_arduino_readDigitalResponse_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if (ArduinoScheduler_send_arduino_readDigitalResponse_listener != 0x0) ArduinoScheduler_send_arduino_readDigitalResponse_listener(_instance, pin, DigitalState);
-}
-void (*ArduinoScheduler_send_arduino_readAnalogResponse_listener)(struct ArduinoScheduler_Instance*, uint8_t, int)= 0x0;
-void register_ArduinoScheduler_send_arduino_readAnalogResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, int)){
-ArduinoScheduler_send_arduino_readAnalogResponse_listener = _listener;
-}
-void ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
-if (ArduinoScheduler_send_arduino_readAnalogResponse_listener != 0x0) ArduinoScheduler_send_arduino_readAnalogResponse_listener(_instance, pin, res);
-}
-
-/*****************************************************************************
  * Headers for type : MCReady
  *****************************************************************************/
 
@@ -725,6 +207,529 @@ void MCReady_send_arduino_readAnalog(struct MCReady_Instance *_instance, uint8_t
 if (MCReady_send_arduino_readAnalog_listener != 0x0) MCReady_send_arduino_readAnalog_listener(_instance, pin);
 }
 
+/*****************************************************************************
+ * Headers for type : ArduinoScheduler
+ *****************************************************************************/
+
+
+// BEGIN: Code from the c_header annotation ArduinoScheduler
+
+#define NB_SOFT_TIMERS 4 // for 4 different timers, 0 to 3. change here to get more or less timers.
+
+// END: Code from the c_header annotation ArduinoScheduler
+
+// Definition of the instance stuct:
+struct ArduinoScheduler_Instance {
+// Variables for the ID of the instance
+int id;
+// Variables for the current instance state
+int ArduinoScheduler_ArduinoSchedulerStateChart_State;
+// Variables for the properties of the instance
+uint8_t ArduinoScheduler_interrupt_counter__var;
+long ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[NB_SOFT_TIMERS];
+long ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var;
+};
+
+// Declaration of prototypes outgoing messages:
+void ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(int state, struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_handle_polling_poll(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_handle_polling_setup(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_handle_arduino_readDigital(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+void ArduinoScheduler_handle_arduino_serial_print_str(struct ArduinoScheduler_Instance *_instance, char * msg);
+void ArduinoScheduler_handle_arduino_serial_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num);
+void ArduinoScheduler_handle_arduino_setDigitalLow(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+void ArduinoScheduler_handle_arduino_usb_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num);
+void ArduinoScheduler_handle_arduino_setOutput(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+void ArduinoScheduler_handle_arduino_setInput(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+void ArduinoScheduler_handle_arduino_serial_print_dec(struct ArduinoScheduler_Instance *_instance, double num);
+void ArduinoScheduler_handle_arduino_timer_start(struct ArduinoScheduler_Instance *_instance, uint8_t id, int16_t time);
+void ArduinoScheduler_handle_arduino_usb_print_dec(struct ArduinoScheduler_Instance *_instance, double num);
+void ArduinoScheduler_handle_arduino_readAnalog(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+void ArduinoScheduler_handle_arduino_timer_cancel(struct ArduinoScheduler_Instance *_instance, uint8_t id);
+void ArduinoScheduler_handle_arduino_usb_print_str(struct ArduinoScheduler_Instance *_instance, char * msg);
+void ArduinoScheduler_handle_arduino_setDigitalHigh(struct ArduinoScheduler_Instance *_instance, uint8_t pin);
+// Declaration of callbacks for incomming messages:
+void register_ArduinoScheduler_send_arduino_ready_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
+void register_ArduinoScheduler_send_arduino_4ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
+void register_ArduinoScheduler_send_arduino_100ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
+void register_ArduinoScheduler_send_arduino_1s_poll_listener(void (*_listener)(struct ArduinoScheduler_Instance*));
+void register_ArduinoScheduler_send_arduino_timeout_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t));
+void register_ArduinoScheduler_send_arduino_serial_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char));
+void register_ArduinoScheduler_send_arduino_usb_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char));
+void register_ArduinoScheduler_send_arduino_readDigitalResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t));
+void register_ArduinoScheduler_send_arduino_readAnalogResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, int));
+
+// Definition of the states:
+#define ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE 0
+#define ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE 1
+
+/*****************************************************************************
+ * Implementation for type : ArduinoScheduler
+ *****************************************************************************/
+
+
+// BEGIN: Code from the c_global annotation ArduinoScheduler
+
+struct ArduinoScheduler_Instance *_ArduinoScheduler_Instance;
+uint8_t interrupt_counter = 0;
+
+// END: Code from the c_global annotation ArduinoScheduler
+
+// Declaration of prototypes:
+#ifdef EXTERN_C_PROTOTYPES
+extern "C" {
+#endif
+void ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(int state, struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance);
+void ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id);
+void ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c);
+void ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c);
+void ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState);
+void ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res);
+void f_ArduinoScheduler_initialize_timer2(struct ArduinoScheduler_Instance *_instance);
+SIGNAL(TIMER2_OVF_vect);
+#ifdef EXTERN_C_PROTOTYPES
+}
+#endif
+
+// Declaration of functions:
+// Definition of function initialize_timer2
+void f_ArduinoScheduler_initialize_timer2(struct ArduinoScheduler_Instance *_instance) {
+{
+// Store the instance in a global variable so that the interrupt routine can use it
+		_ArduinoScheduler_instance = _instance;
+		
+		// Run timer2 interrupt up counting at 250kHz 
+		 TCCR2A = 0;
+		 TCCR2B = 1<<CS22 | 0<<CS21 | 0<<CS20;
+		
+		 //Timer2 Overflow Interrupt Enable
+		 TIMSK2 |= 1<<TOIE2;
+		
+}
+}
+
+// Definition of function timer2_overflow_interrupt
+SIGNAL(TIMER2_OVF_vect) {
+{
+TCNT2 = 5; // Leave 250 tics until overflow (1 overflow every 1ms)
+interrupt_counter++;
+if(interrupt_counter >= 99) {
+ArduinoScheduler_send_arduino_100ms_interrupt(_ArduinoScheduler_instance);
+interrupt_counter=0;
+}
+if(interrupt_counter % 4) {
+ArduinoScheduler_send_arduino_4ms_interrupt(_ArduinoScheduler_instance);
+}
+}
+}
+
+
+// On Entry Actions:
+void ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(int state, struct ArduinoScheduler_Instance *_instance) {
+switch(state) {
+case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE:
+_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State = ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE;
+{
+Serial.begin(9600);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_OnEntry(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State, _instance);
+break;
+case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE:
+break;
+default: break;
+}
+}
+
+// On Exit Actions:
+void ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(int state, struct ArduinoScheduler_Instance *_instance) {
+switch(state) {
+case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_STATE:
+ArduinoScheduler_ArduinoSchedulerStateChart_OnExit(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_State, _instance);
+break;
+case ARDUINOSCHEDULER_ARDUINOSCHEDULERSTATECHART_ACTIVE_STATE:
+break;
+default: break;
+}
+}
+
+// Event Handlers for incoming messages:
+void ArduinoScheduler_handle_polling_poll(struct ArduinoScheduler_Instance *_instance) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+long tms = millis();
+uint8_t t = 0;
+while(t < NB_SOFT_TIMERS) {
+if(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] > 0 && _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] < tms) {
+_instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[t] = 0;
+ArduinoScheduler_send_arduino_timeout(_instance, t);
+}
+t = t + 1;
+}
+if(_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var < tms) {
+_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var = _instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var + 1000;
+ArduinoScheduler_send_arduino_1s_poll(_instance);
+}
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_polling_setup(struct ArduinoScheduler_Instance *_instance) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+f_ArduinoScheduler_initialize_timer2(_instance);
+_instance->ArduinoScheduler_ArduinoSchedulerStateChart_prev_1sec__var = millis() + 1000;
+ArduinoScheduler_send_arduino_ready(_instance);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_readDigital(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+if((digitalRead(pin) == HIGH)) {
+ArduinoScheduler_send_arduino_readDigitalResponse(_instance, pin, DIGITALSTATE_HIGH);
+}
+if((digitalRead(pin) == LOW)) {
+ArduinoScheduler_send_arduino_readDigitalResponse(_instance, pin, DIGITALSTATE_LOW);
+}
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_serial_print_str(struct ArduinoScheduler_Instance *_instance, char * msg) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(msg);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_serial_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(num);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_setDigitalLow(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+digitalWrite(pin, LOW);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_usb_print_num(struct ArduinoScheduler_Instance *_instance, int16_t num) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(num);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_setOutput(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+pinMode(pin,OUTPUT);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_setInput(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+pinMode(pin,INPUT);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_serial_print_dec(struct ArduinoScheduler_Instance *_instance, double num) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(num);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_timer_start(struct ArduinoScheduler_Instance *_instance, uint8_t id, int16_t time) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+if(id < NB_SOFT_TIMERS) _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[id] = millis() + time - 1;
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_usb_print_dec(struct ArduinoScheduler_Instance *_instance, double num) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(num);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_readAnalog(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+ArduinoScheduler_send_arduino_readAnalogResponse(_instance, pin, analogRead(pin));
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_timer_cancel(struct ArduinoScheduler_Instance *_instance, uint8_t id) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+if(id < NB_SOFT_TIMERS) _instance->ArduinoScheduler_ArduinoSchedulerStateChart_timers__var[id] = 0;
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_usb_print_str(struct ArduinoScheduler_Instance *_instance, char * msg) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+Serial.print(msg);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+void ArduinoScheduler_handle_arduino_setDigitalHigh(struct ArduinoScheduler_Instance *_instance, uint8_t pin) {
+uint8_t ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 0;
+if (1) {
+{
+digitalWrite(pin, HIGH);
+}
+ArduinoScheduler_ArduinoSchedulerStateChart_State_event_consumed = 1;
+}
+}
+
+// Observers for outgoing messages:
+void (*ArduinoScheduler_send_arduino_ready_listener)(struct ArduinoScheduler_Instance*)= 0x0;
+void register_ArduinoScheduler_send_arduino_ready_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
+ArduinoScheduler_send_arduino_ready_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
+if (ArduinoScheduler_send_arduino_ready_listener != 0x0) ArduinoScheduler_send_arduino_ready_listener(_instance);
+}
+void (*ArduinoScheduler_send_arduino_4ms_interrupt_listener)(struct ArduinoScheduler_Instance*)= 0x0;
+void register_ArduinoScheduler_send_arduino_4ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
+ArduinoScheduler_send_arduino_4ms_interrupt_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if (ArduinoScheduler_send_arduino_4ms_interrupt_listener != 0x0) ArduinoScheduler_send_arduino_4ms_interrupt_listener(_instance);
+}
+void (*ArduinoScheduler_send_arduino_100ms_interrupt_listener)(struct ArduinoScheduler_Instance*)= 0x0;
+void register_ArduinoScheduler_send_arduino_100ms_interrupt_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
+ArduinoScheduler_send_arduino_100ms_interrupt_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if (ArduinoScheduler_send_arduino_100ms_interrupt_listener != 0x0) ArduinoScheduler_send_arduino_100ms_interrupt_listener(_instance);
+}
+void (*ArduinoScheduler_send_arduino_1s_poll_listener)(struct ArduinoScheduler_Instance*)= 0x0;
+void register_ArduinoScheduler_send_arduino_1s_poll_listener(void (*_listener)(struct ArduinoScheduler_Instance*)){
+ArduinoScheduler_send_arduino_1s_poll_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
+if (ArduinoScheduler_send_arduino_1s_poll_listener != 0x0) ArduinoScheduler_send_arduino_1s_poll_listener(_instance);
+}
+void (*ArduinoScheduler_send_arduino_timeout_listener)(struct ArduinoScheduler_Instance*, uint8_t)= 0x0;
+void register_ArduinoScheduler_send_arduino_timeout_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t)){
+ArduinoScheduler_send_arduino_timeout_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
+if (ArduinoScheduler_send_arduino_timeout_listener != 0x0) ArduinoScheduler_send_arduino_timeout_listener(_instance, id);
+}
+void (*ArduinoScheduler_send_arduino_serial_rx_char_listener)(struct ArduinoScheduler_Instance*, char)= 0x0;
+void register_ArduinoScheduler_send_arduino_serial_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char)){
+ArduinoScheduler_send_arduino_serial_rx_char_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if (ArduinoScheduler_send_arduino_serial_rx_char_listener != 0x0) ArduinoScheduler_send_arduino_serial_rx_char_listener(_instance, c);
+}
+void (*ArduinoScheduler_send_arduino_usb_rx_char_listener)(struct ArduinoScheduler_Instance*, char)= 0x0;
+void register_ArduinoScheduler_send_arduino_usb_rx_char_listener(void (*_listener)(struct ArduinoScheduler_Instance*, char)){
+ArduinoScheduler_send_arduino_usb_rx_char_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if (ArduinoScheduler_send_arduino_usb_rx_char_listener != 0x0) ArduinoScheduler_send_arduino_usb_rx_char_listener(_instance, c);
+}
+void (*ArduinoScheduler_send_arduino_readDigitalResponse_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t)= 0x0;
+void register_ArduinoScheduler_send_arduino_readDigitalResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, uint8_t)){
+ArduinoScheduler_send_arduino_readDigitalResponse_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
+if (ArduinoScheduler_send_arduino_readDigitalResponse_listener != 0x0) ArduinoScheduler_send_arduino_readDigitalResponse_listener(_instance, pin, DigitalState);
+}
+void (*ArduinoScheduler_send_arduino_readAnalogResponse_listener)(struct ArduinoScheduler_Instance*, uint8_t, int)= 0x0;
+void register_ArduinoScheduler_send_arduino_readAnalogResponse_listener(void (*_listener)(struct ArduinoScheduler_Instance*, uint8_t, int)){
+ArduinoScheduler_send_arduino_readAnalogResponse_listener = _listener;
+}
+void ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
+if (ArduinoScheduler_send_arduino_readAnalogResponse_listener != 0x0) ArduinoScheduler_send_arduino_readAnalogResponse_listener(_instance, pin, res);
+}
+
+/*****************************************************************************
+ * Headers for type : Bridge
+ *****************************************************************************/
+
+
+// BEGIN: Code from the c_header annotation Bridge
+
+#include <SoftwareSerial.h>
+#include "/home/sintef/Documents/ArduinoSerialForward/YunBridge/ArduinoSerialForward.h" 
+// END: Code from the c_header annotation Bridge
+
+// Definition of the instance stuct:
+struct Bridge_Instance {
+// Variables for the ID of the instance
+int id;
+// Variables for the current instance state
+int Bridge_BridgeChart_State;
+// Variables for the properties of the instance
+};
+
+// Declaration of prototypes outgoing messages:
+void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance);
+// Declaration of callbacks for incomming messages:
+void register_Bridge_send_Serial1_setDigitalHigh_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_setDigitalLow_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_setOutput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_setInput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_readDigital_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_readAnalog_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+void register_Bridge_send_Serial1_timer_start_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int16_t));
+void register_Bridge_send_Serial1_timer_cancel_listener(void (*_listener)(struct Bridge_Instance*, uint8_t));
+
+// Definition of the states:
+#define BRIDGE_BRIDGECHART_STATE 0
+#define BRIDGE_BRIDGECHART_INIT_STATE 1
+
+/*****************************************************************************
+ * Implementation for type : Bridge
+ *****************************************************************************/
+
+// Declaration of prototypes:
+#ifdef EXTERN_C_PROTOTYPES
+extern "C" {
+#endif
+void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance);
+void Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_send_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time);
+void Bridge_send_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id);
+#ifdef EXTERN_C_PROTOTYPES
+}
+#endif
+
+// Declaration of functions:
+
+// On Entry Actions:
+void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance) {
+switch(state) {
+case BRIDGE_BRIDGECHART_STATE:
+_instance->Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
+Bridge_BridgeChart_OnEntry(_instance->Bridge_BridgeChart_State, _instance);
+break;
+case BRIDGE_BRIDGECHART_INIT_STATE:
+break;
+default: break;
+}
+}
+
+// On Exit Actions:
+void Bridge_BridgeChart_OnExit(int state, struct Bridge_Instance *_instance) {
+switch(state) {
+case BRIDGE_BRIDGECHART_STATE:
+Bridge_BridgeChart_OnExit(_instance->Bridge_BridgeChart_State, _instance);
+break;
+case BRIDGE_BRIDGECHART_INIT_STATE:
+break;
+default: break;
+}
+}
+
+// Event Handlers for incoming messages:
+
+// Observers for outgoing messages:
+void (*Bridge_send_Serial1_setDigitalHigh_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_setDigitalHigh_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_setDigitalHigh_listener = _listener;
+}
+void Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_setDigitalHigh_listener != 0x0) Bridge_send_Serial1_setDigitalHigh_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_setDigitalLow_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_setDigitalLow_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_setDigitalLow_listener = _listener;
+}
+void Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_setDigitalLow_listener != 0x0) Bridge_send_Serial1_setDigitalLow_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_setOutput_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_setOutput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_setOutput_listener = _listener;
+}
+void Bridge_send_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_setOutput_listener != 0x0) Bridge_send_Serial1_setOutput_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_setInput_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_setInput_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_setInput_listener = _listener;
+}
+void Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_setInput_listener != 0x0) Bridge_send_Serial1_setInput_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_readDigital_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_readDigital_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_readDigital_listener = _listener;
+}
+void Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_readDigital_listener != 0x0) Bridge_send_Serial1_readDigital_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_readAnalog_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_readAnalog_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_readAnalog_listener = _listener;
+}
+void Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
+if (Bridge_send_Serial1_readAnalog_listener != 0x0) Bridge_send_Serial1_readAnalog_listener(_instance, pin);
+}
+void (*Bridge_send_Serial1_timer_start_listener)(struct Bridge_Instance*, uint8_t, int16_t)= 0x0;
+void register_Bridge_send_Serial1_timer_start_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int16_t)){
+Bridge_send_Serial1_timer_start_listener = _listener;
+}
+void Bridge_send_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time){
+if (Bridge_send_Serial1_timer_start_listener != 0x0) Bridge_send_Serial1_timer_start_listener(_instance, id, time);
+}
+void (*Bridge_send_Serial1_timer_cancel_listener)(struct Bridge_Instance*, uint8_t)= 0x0;
+void register_Bridge_send_Serial1_timer_cancel_listener(void (*_listener)(struct Bridge_Instance*, uint8_t)){
+Bridge_send_Serial1_timer_cancel_listener = _listener;
+}
+void Bridge_send_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id){
+if (Bridge_send_Serial1_timer_cancel_listener != 0x0) Bridge_send_Serial1_timer_cancel_listener(_instance, id);
+}
+
 
 /*****************************************************************************
  * Definitions for configuration : DefaultCfg
@@ -823,258 +828,16 @@ void * _fifo_dequeue_ptr() {
 }
 */
 //Declaration of instance variables
-struct ArduinoScheduler_Instance DefaultCfg_MC_var;
 struct Bridge_Instance DefaultCfg_bridge_var;
+struct ArduinoScheduler_Instance DefaultCfg_MC_var;
 struct MCReady_Instance DefaultCfg_HelloWorld_var;
 
-// Enqueue of messages ArduinoScheduler::arduino::serial_rx_char
-void enqueue_ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (1 >> 8) & 0xFF );
-_fifo_enqueue( 1 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter c
-_fifo_enqueue(c & 0xFF);
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::readDigitalResponse
-void enqueue_ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if ( fifo_byte_available() > 6 ) {
-
-_fifo_enqueue( (2 >> 8) & 0xFF );
-_fifo_enqueue( 2 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-
-// parameter DigitalState
-_fifo_enqueue(DigitalState & 0xFF);
-}
-
-
-forwardByteSerial_Start();
-
-forwardByteSerial( (9 >> 8) & 0xFF );
-forwardByteSerial( 9 & 0xFF );
-
-// ID of the source instance
-forwardByteSerial( (_instance->id >> 8) & 0xFF );
-forwardByteSerial( _instance->id & 0xFF );
-
-// parameter pin
-forwardByteSerial(pin & 0xFF);
-
-// parameter DigitalState
-forwardByteSerial(DigitalState & 0xFF);
-
-forwardByteSerial_Stop();
-}
-// Enqueue of messages ArduinoScheduler::arduino::4ms_interrupt
-void enqueue_ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if ( fifo_byte_available() > 4 ) {
-
-_fifo_enqueue( (3 >> 8) & 0xFF );
-_fifo_enqueue( 3 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::100ms_interrupt
-void enqueue_ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if ( fifo_byte_available() > 4 ) {
-
-_fifo_enqueue( (4 >> 8) & 0xFF );
-_fifo_enqueue( 4 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::1s_poll
-void enqueue_ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
-if ( fifo_byte_available() > 4 ) {
-
-_fifo_enqueue( (5 >> 8) & 0xFF );
-_fifo_enqueue( 5 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::ready
-void enqueue_ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
-if ( fifo_byte_available() > 4 ) {
-
-_fifo_enqueue( (6 >> 8) & 0xFF );
-_fifo_enqueue( 6 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::usb_rx_char
-void enqueue_ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (7 >> 8) & 0xFF );
-_fifo_enqueue( 7 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter c
-_fifo_enqueue(c & 0xFF);
-}
-}
-// Enqueue of messages ArduinoScheduler::arduino::timeout
-void enqueue_ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (8 >> 8) & 0xFF );
-_fifo_enqueue( 8 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter id
-_fifo_enqueue(id & 0xFF);
-}
-
-
-forwardByteSerial_Start();
-
-forwardByteSerial( (9 >> 8) & 0xFF );
-forwardByteSerial( 9 & 0xFF );
-
-// ID of the source instance
-forwardByteSerial( (_instance->id >> 8) & 0xFF );
-forwardByteSerial( _instance->id & 0xFF );
-
-// parameter id
-forwardByteSerial(id & 0xFF);
-
-forwardByteSerial_Stop();
-}
-// Enqueue of messages ArduinoScheduler::arduino::readAnalogResponse
-void enqueue_ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
-if ( fifo_byte_available() > 7 ) {
-
-_fifo_enqueue( (9 >> 8) & 0xFF );
-_fifo_enqueue( 9 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-
-// parameter res
-_fifo_enqueue((res>>8) & 0xFF);
-_fifo_enqueue(res & 0xFF);
-}
-
-
-forwardByteSerial_Start();
-
-forwardByteSerial( (9 >> 8) & 0xFF );
-forwardByteSerial( 9 & 0xFF );
-
-// ID of the source instance
-forwardByteSerial( (_instance->id >> 8) & 0xFF );
-forwardByteSerial( _instance->id & 0xFF );
-
-// parameter pin
-forwardByteSerial(pin & 0xFF);
-
-// parameter res
-forwardByteSerial((res>>8) & 0xFF);
-forwardByteSerial(res & 0xFF);
-
-forwardByteSerial_Stop();
-}
-// Enqueue of messages Bridge::Serial1::readAnalog
-void enqueue_Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (10 >> 8) & 0xFF );
-_fifo_enqueue( 10 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Bridge::Serial1::setDigitalHigh
-void enqueue_Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (11 >> 8) & 0xFF );
-_fifo_enqueue( 11 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
 // Enqueue of messages Bridge::Serial1::setOutput
 void enqueue_Bridge_send_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin){
 if ( fifo_byte_available() > 5 ) {
 
-_fifo_enqueue( (12 >> 8) & 0xFF );
-_fifo_enqueue( 12 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Bridge::Serial1::setDigitalLow
-void enqueue_Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (13 >> 8) & 0xFF );
-_fifo_enqueue( 13 & 0xFF );
-
-// ID of the source instance
-_fifo_enqueue( (_instance->id >> 8) & 0xFF );
-_fifo_enqueue( _instance->id & 0xFF );
-
-// parameter pin
-_fifo_enqueue(pin & 0xFF);
-}
-}
-// Enqueue of messages Bridge::Serial1::readDigital
-void enqueue_Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin){
-if ( fifo_byte_available() > 5 ) {
-
-_fifo_enqueue( (14 >> 8) & 0xFF );
-_fifo_enqueue( 14 & 0xFF );
+_fifo_enqueue( (1 >> 8) & 0xFF );
+_fifo_enqueue( 1 & 0xFF );
 
 // ID of the source instance
 _fifo_enqueue( (_instance->id >> 8) & 0xFF );
@@ -1088,8 +851,38 @@ _fifo_enqueue(pin & 0xFF);
 void enqueue_Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin){
 if ( fifo_byte_available() > 5 ) {
 
-_fifo_enqueue( (15 >> 8) & 0xFF );
-_fifo_enqueue( 15 & 0xFF );
+_fifo_enqueue( (2 >> 8) & 0xFF );
+_fifo_enqueue( 2 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
+}
+}
+// Enqueue of messages Bridge::Serial1::readDigital
+void enqueue_Bridge_send_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (3 >> 8) & 0xFF );
+_fifo_enqueue( 3 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
+}
+}
+// Enqueue of messages Bridge::Serial1::readAnalog
+void enqueue_Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (4 >> 8) & 0xFF );
+_fifo_enqueue( 4 & 0xFF );
 
 // ID of the source instance
 _fifo_enqueue( (_instance->id >> 8) & 0xFF );
@@ -1103,8 +896,8 @@ _fifo_enqueue(pin & 0xFF);
 void enqueue_Bridge_send_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time){
 if ( fifo_byte_available() > 7 ) {
 
-_fifo_enqueue( (16 >> 8) & 0xFF );
-_fifo_enqueue( 16 & 0xFF );
+_fifo_enqueue( (5 >> 8) & 0xFF );
+_fifo_enqueue( 5 & 0xFF );
 
 // ID of the source instance
 _fifo_enqueue( (_instance->id >> 8) & 0xFF );
@@ -1122,8 +915,8 @@ _fifo_enqueue(time & 0xFF);
 void enqueue_Bridge_send_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id){
 if ( fifo_byte_available() > 5 ) {
 
-_fifo_enqueue( (17 >> 8) & 0xFF );
-_fifo_enqueue( 17 & 0xFF );
+_fifo_enqueue( (6 >> 8) & 0xFF );
+_fifo_enqueue( 6 & 0xFF );
 
 // ID of the source instance
 _fifo_enqueue( (_instance->id >> 8) & 0xFF );
@@ -1133,17 +926,210 @@ _fifo_enqueue( _instance->id & 0xFF );
 _fifo_enqueue(id & 0xFF);
 }
 }
+// Enqueue of messages Bridge::Serial1::setDigitalLow
+void enqueue_Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
+if ( fifo_byte_available() > 5 ) {
 
-// Dispatch for messages Bridge::Serial1::readAnalog
-void dispatch_Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_bridge_var) {
-ArduinoScheduler_handle_arduino_readAnalog(&DefaultCfg_MC_var, pin);
+_fifo_enqueue( (7 >> 8) & 0xFF );
+_fifo_enqueue( 7 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
 }
 }
-// Dispatch for messages Bridge::Serial1::setDigitalHigh
-void dispatch_Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_bridge_var) {
-ArduinoScheduler_handle_arduino_setDigitalHigh(&DefaultCfg_MC_var, pin);
+// Enqueue of messages Bridge::Serial1::setDigitalHigh
+void enqueue_Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (8 >> 8) & 0xFF );
+_fifo_enqueue( 8 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::100ms_interrupt
+void enqueue_ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if ( fifo_byte_available() > 4 ) {
+
+_fifo_enqueue( (9 >> 8) & 0xFF );
+_fifo_enqueue( 9 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::4ms_interrupt
+void enqueue_ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if ( fifo_byte_available() > 4 ) {
+
+_fifo_enqueue( (10 >> 8) & 0xFF );
+_fifo_enqueue( 10 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::1s_poll
+void enqueue_ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
+if ( fifo_byte_available() > 4 ) {
+
+_fifo_enqueue( (11 >> 8) & 0xFF );
+_fifo_enqueue( 11 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::usb_rx_char
+void enqueue_ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (12 >> 8) & 0xFF );
+_fifo_enqueue( 12 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter c
+_fifo_enqueue(c & 0xFF);
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::readDigitalResponse
+void enqueue_ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
+if ( fifo_byte_available() > 6 ) {
+
+_fifo_enqueue( (13 >> 8) & 0xFF );
+_fifo_enqueue( 13 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
+
+// parameter DigitalState
+_fifo_enqueue(DigitalState & 0xFF);
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::readAnalogResponse
+void enqueue_ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
+if ( fifo_byte_available() > 7 ) {
+
+_fifo_enqueue( (14 >> 8) & 0xFF );
+_fifo_enqueue( 14 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter pin
+_fifo_enqueue(pin & 0xFF);
+
+// parameter res
+_fifo_enqueue((res>>8) & 0xFF);
+_fifo_enqueue(res & 0xFF);
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::ready
+void enqueue_ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
+if ( fifo_byte_available() > 4 ) {
+
+_fifo_enqueue( (15 >> 8) & 0xFF );
+_fifo_enqueue( 15 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::timeout
+void enqueue_ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (16 >> 8) & 0xFF );
+_fifo_enqueue( 16 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter id
+_fifo_enqueue(id & 0xFF);
+}
+}
+// Enqueue of messages ArduinoScheduler::arduino::serial_rx_char
+void enqueue_ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if ( fifo_byte_available() > 5 ) {
+
+_fifo_enqueue( (17 >> 8) & 0xFF );
+_fifo_enqueue( 17 & 0xFF );
+
+// ID of the source instance
+_fifo_enqueue( (_instance->id >> 8) & 0xFF );
+_fifo_enqueue( _instance->id & 0xFF );
+
+// parameter c
+_fifo_enqueue(c & 0xFF);
+}
+}
+
+// Dispatch for messages ArduinoScheduler::arduino::100ms_interrupt
+void dispatch_ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::4ms_interrupt
+void dispatch_ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::1s_poll
+void dispatch_ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::usb_rx_char
+void dispatch_ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::readDigitalResponse
+void dispatch_ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::readAnalogResponse
+void dispatch_ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::ready
+void dispatch_ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::timeout
+void dispatch_ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
+if (_instance == &DefaultCfg_MC_var) {
+}
+}
+// Dispatch for messages ArduinoScheduler::arduino::serial_rx_char
+void dispatch_ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
+if (_instance == &DefaultCfg_MC_var) {
 }
 }
 // Dispatch for messages Bridge::Serial1::setOutput
@@ -1152,10 +1138,10 @@ if (_instance == &DefaultCfg_bridge_var) {
 ArduinoScheduler_handle_arduino_setOutput(&DefaultCfg_MC_var, pin);
 }
 }
-// Dispatch for messages Bridge::Serial1::setDigitalLow
-void dispatch_Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
+// Dispatch for messages Bridge::Serial1::setInput
+void dispatch_Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin){
 if (_instance == &DefaultCfg_bridge_var) {
-ArduinoScheduler_handle_arduino_setDigitalLow(&DefaultCfg_MC_var, pin);
+ArduinoScheduler_handle_arduino_setInput(&DefaultCfg_MC_var, pin);
 }
 }
 // Dispatch for messages Bridge::Serial1::readDigital
@@ -1164,10 +1150,10 @@ if (_instance == &DefaultCfg_bridge_var) {
 ArduinoScheduler_handle_arduino_readDigital(&DefaultCfg_MC_var, pin);
 }
 }
-// Dispatch for messages Bridge::Serial1::setInput
-void dispatch_Bridge_send_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin){
+// Dispatch for messages Bridge::Serial1::readAnalog
+void dispatch_Bridge_send_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin){
 if (_instance == &DefaultCfg_bridge_var) {
-ArduinoScheduler_handle_arduino_setInput(&DefaultCfg_MC_var, pin);
+ArduinoScheduler_handle_arduino_readAnalog(&DefaultCfg_MC_var, pin);
 }
 }
 // Dispatch for messages Bridge::Serial1::timer_start
@@ -1182,61 +1168,28 @@ if (_instance == &DefaultCfg_bridge_var) {
 ArduinoScheduler_handle_arduino_timer_cancel(&DefaultCfg_MC_var, id);
 }
 }
-// Dispatch for messages ArduinoScheduler::arduino::serial_rx_char
-void dispatch_ArduinoScheduler_send_arduino_serial_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if (_instance == &DefaultCfg_MC_var) {
+// Dispatch for messages Bridge::Serial1::setDigitalLow
+void dispatch_Bridge_send_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin){
+if (_instance == &DefaultCfg_bridge_var) {
+ArduinoScheduler_handle_arduino_setDigitalLow(&DefaultCfg_MC_var, pin);
 }
 }
-// Dispatch for messages ArduinoScheduler::arduino::readDigitalResponse
-void dispatch_ArduinoScheduler_send_arduino_readDigitalResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, uint8_t DigitalState){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::4ms_interrupt
-void dispatch_ArduinoScheduler_send_arduino_4ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::100ms_interrupt
-void dispatch_ArduinoScheduler_send_arduino_100ms_interrupt(struct ArduinoScheduler_Instance *_instance){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::1s_poll
-void dispatch_ArduinoScheduler_send_arduino_1s_poll(struct ArduinoScheduler_Instance *_instance){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::ready
-void dispatch_ArduinoScheduler_send_arduino_ready(struct ArduinoScheduler_Instance *_instance){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::usb_rx_char
-void dispatch_ArduinoScheduler_send_arduino_usb_rx_char(struct ArduinoScheduler_Instance *_instance, char c){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::timeout
-void dispatch_ArduinoScheduler_send_arduino_timeout(struct ArduinoScheduler_Instance *_instance, uint8_t id){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages ArduinoScheduler::arduino::readAnalogResponse
-void dispatch_ArduinoScheduler_send_arduino_readAnalogResponse(struct ArduinoScheduler_Instance *_instance, uint8_t pin, int res){
-if (_instance == &DefaultCfg_MC_var) {
-}
-}
-// Dispatch for messages MCReady::arduino::setDigitalHigh
-void dispatch_MCReady_send_arduino_setDigitalHigh(struct MCReady_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_HelloWorld_var) {
+// Dispatch for messages Bridge::Serial1::setDigitalHigh
+void dispatch_Bridge_send_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin){
+if (_instance == &DefaultCfg_bridge_var) {
 ArduinoScheduler_handle_arduino_setDigitalHigh(&DefaultCfg_MC_var, pin);
 }
 }
-// Dispatch for messages MCReady::arduino::serial_print_dec
-void dispatch_MCReady_send_arduino_serial_print_dec(struct MCReady_Instance *_instance, double num){
+// Dispatch for messages MCReady::arduino::readDigital
+void dispatch_MCReady_send_arduino_readDigital(struct MCReady_Instance *_instance, uint8_t pin){
 if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_serial_print_dec(&DefaultCfg_MC_var, num);
+ArduinoScheduler_handle_arduino_readDigital(&DefaultCfg_MC_var, pin);
+}
+}
+// Dispatch for messages MCReady::arduino::serial_print_str
+void dispatch_MCReady_send_arduino_serial_print_str(struct MCReady_Instance *_instance, char * msg){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_serial_print_str(&DefaultCfg_MC_var, msg);
 }
 }
 // Dispatch for messages MCReady::arduino::serial_print_num
@@ -1245,22 +1198,10 @@ if (_instance == &DefaultCfg_HelloWorld_var) {
 ArduinoScheduler_handle_arduino_serial_print_num(&DefaultCfg_MC_var, num);
 }
 }
-// Dispatch for messages MCReady::arduino::timer_cancel
-void dispatch_MCReady_send_arduino_timer_cancel(struct MCReady_Instance *_instance, uint8_t id){
+// Dispatch for messages MCReady::arduino::setDigitalLow
+void dispatch_MCReady_send_arduino_setDigitalLow(struct MCReady_Instance *_instance, uint8_t pin){
 if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_timer_cancel(&DefaultCfg_MC_var, id);
-}
-}
-// Dispatch for messages MCReady::arduino::readAnalog
-void dispatch_MCReady_send_arduino_readAnalog(struct MCReady_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_readAnalog(&DefaultCfg_MC_var, pin);
-}
-}
-// Dispatch for messages MCReady::arduino::serial_print_str
-void dispatch_MCReady_send_arduino_serial_print_str(struct MCReady_Instance *_instance, char * msg){
-if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_serial_print_str(&DefaultCfg_MC_var, msg);
+ArduinoScheduler_handle_arduino_setDigitalLow(&DefaultCfg_MC_var, pin);
 }
 }
 // Dispatch for messages MCReady::arduino::usb_print_num
@@ -1275,28 +1216,16 @@ if (_instance == &DefaultCfg_HelloWorld_var) {
 ArduinoScheduler_handle_arduino_setOutput(&DefaultCfg_MC_var, pin);
 }
 }
-// Dispatch for messages MCReady::arduino::setDigitalLow
-void dispatch_MCReady_send_arduino_setDigitalLow(struct MCReady_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_setDigitalLow(&DefaultCfg_MC_var, pin);
-}
-}
-// Dispatch for messages MCReady::arduino::readDigital
-void dispatch_MCReady_send_arduino_readDigital(struct MCReady_Instance *_instance, uint8_t pin){
-if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_readDigital(&DefaultCfg_MC_var, pin);
-}
-}
-// Dispatch for messages MCReady::arduino::usb_print_str
-void dispatch_MCReady_send_arduino_usb_print_str(struct MCReady_Instance *_instance, char * msg){
-if (_instance == &DefaultCfg_HelloWorld_var) {
-ArduinoScheduler_handle_arduino_usb_print_str(&DefaultCfg_MC_var, msg);
-}
-}
 // Dispatch for messages MCReady::arduino::setInput
 void dispatch_MCReady_send_arduino_setInput(struct MCReady_Instance *_instance, uint8_t pin){
 if (_instance == &DefaultCfg_HelloWorld_var) {
 ArduinoScheduler_handle_arduino_setInput(&DefaultCfg_MC_var, pin);
+}
+}
+// Dispatch for messages MCReady::arduino::serial_print_dec
+void dispatch_MCReady_send_arduino_serial_print_dec(struct MCReady_Instance *_instance, double num){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_serial_print_dec(&DefaultCfg_MC_var, num);
 }
 }
 // Dispatch for messages MCReady::arduino::timer_start
@@ -1309,6 +1238,30 @@ ArduinoScheduler_handle_arduino_timer_start(&DefaultCfg_MC_var, id, time);
 void dispatch_MCReady_send_arduino_usb_print_dec(struct MCReady_Instance *_instance, double num){
 if (_instance == &DefaultCfg_HelloWorld_var) {
 ArduinoScheduler_handle_arduino_usb_print_dec(&DefaultCfg_MC_var, num);
+}
+}
+// Dispatch for messages MCReady::arduino::readAnalog
+void dispatch_MCReady_send_arduino_readAnalog(struct MCReady_Instance *_instance, uint8_t pin){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_readAnalog(&DefaultCfg_MC_var, pin);
+}
+}
+// Dispatch for messages MCReady::arduino::timer_cancel
+void dispatch_MCReady_send_arduino_timer_cancel(struct MCReady_Instance *_instance, uint8_t id){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_timer_cancel(&DefaultCfg_MC_var, id);
+}
+}
+// Dispatch for messages MCReady::arduino::usb_print_str
+void dispatch_MCReady_send_arduino_usb_print_str(struct MCReady_Instance *_instance, char * msg){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_usb_print_str(&DefaultCfg_MC_var, msg);
+}
+}
+// Dispatch for messages MCReady::arduino::setDigitalHigh
+void dispatch_MCReady_send_arduino_setDigitalHigh(struct MCReady_Instance *_instance, uint8_t pin){
+if (_instance == &DefaultCfg_HelloWorld_var) {
+ArduinoScheduler_handle_arduino_setDigitalHigh(&DefaultCfg_MC_var, pin);
 }
 }
 
@@ -1327,87 +1280,87 @@ code += fifo_dequeue();
 switch(code) {
 case 1:
 while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_serial_rx_char((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* c */ );
-break;
-case 2:
-while (mbufi < 4) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_readDigitalResponse((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ ,
-mbuf[3] /* DigitalState */ );
-break;
-case 3:
-while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_4ms_interrupt((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
-break;
-case 4:
-while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_100ms_interrupt((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
-break;
-case 5:
-while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_1s_poll((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
-break;
-case 6:
-while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_ready((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
-break;
-case 7:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_usb_rx_char((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* c */ );
-break;
-case 8:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_timeout((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* id */ );
-break;
-case 9:
-while (mbufi < 5) mbuf[mbufi++] = fifo_dequeue();
-dispatch_ArduinoScheduler_send_arduino_readAnalogResponse((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ ,
-(mbuf[3]<<8) + mbuf[4] /* res */ );
-break;
-case 10:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_readAnalog((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 11:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_setDigitalHigh((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 12:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
 dispatch_Bridge_send_Serial1_setOutput((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
 mbuf[2] /* pin */ );
 break;
-case 13:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_setDigitalLow((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 14:
-while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
-dispatch_Bridge_send_Serial1_readDigital((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
-mbuf[2] /* pin */ );
-break;
-case 15:
+case 2:
 while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
 dispatch_Bridge_send_Serial1_setInput((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
 mbuf[2] /* pin */ );
 break;
-case 16:
+case 3:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_Bridge_send_Serial1_readDigital((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ );
+break;
+case 4:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_Bridge_send_Serial1_readAnalog((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ );
+break;
+case 5:
 while (mbufi < 5) mbuf[mbufi++] = fifo_dequeue();
 dispatch_Bridge_send_Serial1_timer_start((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
 mbuf[2] /* id */ ,
 (mbuf[3]<<8) + mbuf[4] /* time */ );
 break;
-case 17:
+case 6:
 while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
 dispatch_Bridge_send_Serial1_timer_cancel((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
 mbuf[2] /* id */ );
+break;
+case 7:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_Bridge_send_Serial1_setDigitalLow((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ );
+break;
+case 8:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_Bridge_send_Serial1_setDigitalHigh((struct Bridge_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ );
+break;
+case 9:
+while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_100ms_interrupt((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
+break;
+case 10:
+while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_4ms_interrupt((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
+break;
+case 11:
+while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_1s_poll((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
+break;
+case 12:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_usb_rx_char((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* c */ );
+break;
+case 13:
+while (mbufi < 4) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_readDigitalResponse((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ ,
+mbuf[3] /* DigitalState */ );
+break;
+case 14:
+while (mbufi < 5) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_readAnalogResponse((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* pin */ ,
+(mbuf[3]<<8) + mbuf[4] /* res */ );
+break;
+case 15:
+while (mbufi < 2) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_ready((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */);
+break;
+case 16:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_timeout((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* id */ );
+break;
+case 17:
+while (mbufi < 3) mbuf[mbufi++] = fifo_dequeue();
+dispatch_ArduinoScheduler_send_arduino_serial_rx_char((struct ArduinoScheduler_Instance*)instance_by_id((mbuf[0] << 8) + mbuf[1]) /* instance */,
+mbuf[2] /* c */ );
 break;
 }
 }
@@ -1446,13 +1399,13 @@ register_MCReady_send_arduino_setInput_listener(dispatch_MCReady_send_arduino_se
 register_MCReady_send_arduino_readDigital_listener(dispatch_MCReady_send_arduino_readDigital);
 register_MCReady_send_arduino_readAnalog_listener(dispatch_MCReady_send_arduino_readAnalog);
 
-// Init the ID, state variables and properties for instance DefaultCfg_HelloWorld
-DefaultCfg_HelloWorld_var.id = add_instance( (void*) &DefaultCfg_HelloWorld_var);
-DefaultCfg_HelloWorld_var.MCReady_MCReadyChart_State = MCREADY_MCREADYCHART_HELLO_STATE;
-
 // Init the ID, state variables and properties for instance DefaultCfg_bridge
 DefaultCfg_bridge_var.id = add_instance( (void*) &DefaultCfg_bridge_var);
 DefaultCfg_bridge_var.Bridge_BridgeChart_State = BRIDGE_BRIDGECHART_INIT_STATE;
+
+// Init the ID, state variables and properties for instance DefaultCfg_HelloWorld
+DefaultCfg_HelloWorld_var.id = add_instance( (void*) &DefaultCfg_HelloWorld_var);
+DefaultCfg_HelloWorld_var.MCReady_MCReadyChart_State = MCREADY_MCREADYCHART_HELLO_STATE;
 
 // Init the ID, state variables and properties for instance DefaultCfg_MC
 DefaultCfg_MC_var.id = add_instance( (void*) &DefaultCfg_MC_var);
@@ -1469,14 +1422,12 @@ Bridge_BridgeChart_OnEntry(BRIDGE_BRIDGECHART_STATE, &DefaultCfg_bridge_var);
  *****************************************************************************/
 
 void setup() {
-setupArduinoSerialForward(0);
 initialize_configuration_DefaultCfg();
 ArduinoScheduler_handle_polling_setup(&DefaultCfg_MC_var);
 
 }
 
 void loop() {
-readSerial();
 ArduinoScheduler_handle_polling_poll(&DefaultCfg_MC_var);
 
 processMessageQueue();
