@@ -85,8 +85,8 @@ thing Bridge includes BridgeMsgs, SerialClientPort, ReadyMsg {
 		composite state Active init Idle {
 			
 			internal event e : serial?serial_rx action do
-				print "[Bridge] received: " + e.b
-				print "\n"
+				//print "[Bridge] received: " + e.b
+				//print "\n"
 			end
 			
 			internal event e : Serial1?setDigitalHigh action do
