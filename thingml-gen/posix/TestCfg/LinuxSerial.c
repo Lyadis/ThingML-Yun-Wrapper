@@ -48,8 +48,8 @@ int result;
 	
 			tcgetattr(result, &port_settings); // get current options
 	
-			cfsetispeed(&port_settings, B115200);    // set baud rates to 115200
-			cfsetospeed(&port_settings, B115200);
+			cfsetispeed(&port_settings, B57600);    // set baud rates to 115200 ---------- Test with 57600
+			cfsetospeed(&port_settings, B57600);
 	
 			port_settings.c_cflag &= ~PARENB;	// Set 8N1, No Parity
 			port_settings.c_cflag &= ~CSTOPB;
@@ -75,6 +75,7 @@ int n;
 		data[0] = byte;
         
 		n = write(device, data, 1);
+		sleep(1);// TOTEST ----------------------------------------------------------------------
 		if (n < 0) {
 			perror("Error writing to Serial device");
 			return -1;
