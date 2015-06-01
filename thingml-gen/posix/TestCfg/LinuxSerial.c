@@ -75,7 +75,7 @@ int n;
 		data[0] = byte;
         
 		n = write(device, data, 1);
-		sleep(0.001);// TOTEST ----------------------------------------------------------------------
+		//sleep(0.001);// TOTEST ----------------------------------------------------------------------
 		if (n < 0) {
 			perror("Error writing to Serial device");
 			return -1;

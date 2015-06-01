@@ -55,6 +55,7 @@ thing Test includes BridgeClient {
 			
 			transition -> Blink event bridge?CPUBridgeReady action do
 				bridge!setOutput(Led)
+				'sleep(1);'
 			end
 		}
 		
@@ -62,11 +63,14 @@ thing Test includes BridgeClient {
 			on entry do
 				print "Blink"
 				bridge!timer_start(timerID, time)
+				'sleep(1);'
 				if(On) do
 					bridge!setDigitalLow(Led)
+					'sleep(1);'
 				end
 				if(not(On)) do
 					bridge!setDigitalHigh(Led)
+					'sleep(1);'
 				end
 				On = not(On)
 			end
