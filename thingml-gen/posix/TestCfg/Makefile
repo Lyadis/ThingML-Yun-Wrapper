@@ -1,8 +1,8 @@
 CC = cc
 LIBS = -lpthread 
 CFLAGS = -O2 -w
-SRCS = Test.c LinuxSerial.c Bridge.c TestCfg.c runtime.c
-OBJS = Test.o LinuxSerial.o Bridge.o TestCfg.o runtime.o
+SRCS = LinuxSerial.c Bridge.c Test.c TestCfg.c runtime.c
+OBJS = LinuxSerial.o Bridge.o Test.o TestCfg.o runtime.o
 
 all : TestCfg
 

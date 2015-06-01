@@ -117,6 +117,7 @@ char buffer[INPUT_BUFFER_SIZE]; // Data read from the ESUSMS device
 			n = select(device+1, &rdfs, NULL, NULL, &timeout); // Wait for timeout for something to be available to read
 	
 			if (n < 0) {
+				printf("Error waiting for incoming data from Serial device");
 				perror("Error waiting for incoming data from Serial device");
 				break;
 			}
