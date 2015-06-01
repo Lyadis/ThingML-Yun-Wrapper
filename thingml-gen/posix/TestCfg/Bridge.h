@@ -35,16 +35,16 @@ int Bridge_bps__var;
 
 // Declaration of prototypes outgoing messages:
 void Bridge_BridgeChart_OnEntry(int state, struct Bridge_Instance *_instance);
-void Bridge_handle_serial_serial_opened(struct Bridge_Instance *_instance);
 void Bridge_handle_serial_serial_rx(struct Bridge_Instance *_instance, uint8_t b);
-void Bridge_handle_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_handle_serial_serial_opened(struct Bridge_Instance *_instance);
+void Bridge_handle_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin);
 void Bridge_handle_Serial1_setDigitalHigh(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time);
+void Bridge_handle_Serial1_setInput(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_handle_Serial1_readDigital(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin);
 void Bridge_handle_Serial1_timer_cancel(struct Bridge_Instance *_instance, uint8_t id);
 void Bridge_handle_Serial1_setOutput(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_readAnalog(struct Bridge_Instance *_instance, uint8_t pin);
-void Bridge_handle_Serial1_setDigitalLow(struct Bridge_Instance *_instance, uint8_t pin);
+void Bridge_handle_Serial1_timer_start(struct Bridge_Instance *_instance, uint8_t id, int16_t time);
 // Declaration of callbacks for incomming messages:
 void register_Bridge_send_Serial1_readDigitalResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, uint8_t));
 void register_Bridge_send_Serial1_readAnalogResponse_listener(void (*_listener)(struct Bridge_Instance*, uint8_t, int));

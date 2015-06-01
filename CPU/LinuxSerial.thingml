@@ -105,9 +105,9 @@ thing LinuxSerial includes Serial
 				break;
 			}
 			else { // there is something to read
-				printf("[receiver] rx?\n");
+				printf("[receiver] rx?");
 				n = read('& device &', &buffer, INPUT_BUFFER_SIZE * sizeof(char));
-	
+				printf(" n=<%i>\n", n);
 				if (n<0) {
 					perror("Error reading from Serial device");
 					break;

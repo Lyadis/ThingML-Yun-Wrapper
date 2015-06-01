@@ -32,8 +32,8 @@ uint8_t Test_Led__var;
 
 // Declaration of prototypes outgoing messages:
 void Test_testChart_OnEntry(int state, struct Test_Instance *_instance);
-void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id);
 void Test_handle_bridge_CPUBridgeReady(struct Test_Instance *_instance);
+void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id);
 // Declaration of callbacks for incomming messages:
 void register_Test_send_bridge_setDigitalHigh_listener(void (*_listener)(struct Test_Instance*, uint8_t));
 void register_Test_send_bridge_setDigitalLow_listener(void (*_listener)(struct Test_Instance*, uint8_t));
