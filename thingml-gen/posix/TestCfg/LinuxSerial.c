@@ -250,8 +250,9 @@ uint8_t LinuxSerial_LinuxSerialImpl_State_event_consumed = 0;
 if (_instance->LinuxSerial_LinuxSerialImpl_State == LINUXSERIAL_LINUXSERIALIMPL_RUNNING_STATE) {
 if (LinuxSerial_LinuxSerialImpl_State_event_consumed == 0 && 1) {
 {
-f_LinuxSerial_send_byte(_instance, _instance->LinuxSerial_LinuxSerialImpl_serial_device__var, b);
-printf( "[LinuxSerial] wrote<%i>\n", b);
+_instance->LinuxSerial_LinuxSerialImpl_success__var = f_LinuxSerial_send_byte(_instance, _instance->LinuxSerial_LinuxSerialImpl_serial_device__var, b);
+printf( "[LinuxSerial] wrote<%i>", b);
+printf( " returns %i \n", _instance->LinuxSerial_LinuxSerialImpl_success__var);
 }
 LinuxSerial_LinuxSerialImpl_State_event_consumed = 1;
 }

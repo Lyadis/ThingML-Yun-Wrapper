@@ -38,6 +38,7 @@ int id;
 int LinuxSerial_LinuxSerialImpl_State;
 // Variables for the properties of the instance
 int16_t LinuxSerial_LinuxSerialImpl_serial_device__var;
+int16_t LinuxSerial_LinuxSerialImpl_success__var;
 };
 
 // Declaration of prototypes outgoing messages:

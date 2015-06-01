@@ -135,6 +135,7 @@ thing LinuxSerial includes Serial
 	statechart LinuxSerialImpl init Running {
 	
 		property serial_device : Integer
+		property success : Integer
 	
 		state Running {
 				
@@ -153,8 +154,9 @@ thing LinuxSerial includes Serial
 			
 			internal event c : serial?serial_tx
 			action do 
-				send_byte(serial_device, c.b)
-				'printf( "[LinuxSerial] wrote<%i>\n", '& c.b &');'
+				success = send_byte(serial_device, c.b)
+				'printf( "[LinuxSerial] wrote<%i>", '& c.b &');'
+				'printf( " returns %i \n", '& success &');'
 			end
 		}
 		
