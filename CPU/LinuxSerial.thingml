@@ -104,6 +104,8 @@ thing LinuxSerial includes Serial
 
 		int n; // used to store the results of select and read
 		int i; // loop index
+		
+		printf("[receiver process] Start\n");
 	
 		while (1) {
 	

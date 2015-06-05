@@ -78,6 +78,17 @@ default: break;
 }
 
 // Event Handlers for incoming messages:
+void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id) {
+uint8_t Test_testChart_State_event_consumed = 0;
+if (_instance->Test_testChart_State == TEST_TESTCHART_BLINK_STATE) {
+if (Test_testChart_State_event_consumed == 0 && 1) {
+Test_testChart_OnExit(TEST_TESTCHART_BLINK_STATE, _instance);
+_instance->Test_testChart_State = TEST_TESTCHART_BLINK_STATE;
+Test_testChart_OnEntry(TEST_TESTCHART_BLINK_STATE, _instance);
+Test_testChart_State_event_consumed = 1;
+}
+}
+}
 void Test_handle_bridge_CPUBridgeReady(struct Test_Instance *_instance) {
 uint8_t Test_testChart_State_event_consumed = 0;
 if (_instance->Test_testChart_State == TEST_TESTCHART_INIT_STATE) {
@@ -88,17 +99,6 @@ _instance->Test_testChart_State = TEST_TESTCHART_BLINK_STATE;
 Test_send_bridge_setOutput(_instance, _instance->Test_Led__var);
 sleep(1);
 }
-Test_testChart_OnEntry(TEST_TESTCHART_BLINK_STATE, _instance);
-Test_testChart_State_event_consumed = 1;
-}
-}
-}
-void Test_handle_bridge_timeout(struct Test_Instance *_instance, uint8_t id) {
-uint8_t Test_testChart_State_event_consumed = 0;
-if (_instance->Test_testChart_State == TEST_TESTCHART_BLINK_STATE) {
-if (Test_testChart_State_event_consumed == 0 && 1) {
-Test_testChart_OnExit(TEST_TESTCHART_BLINK_STATE, _instance);
-_instance->Test_testChart_State = TEST_TESTCHART_BLINK_STATE;
 Test_testChart_OnEntry(TEST_TESTCHART_BLINK_STATE, _instance);
 Test_testChart_State_event_consumed = 1;
 }
