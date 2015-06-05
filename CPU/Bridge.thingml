@@ -1,5 +1,6 @@
 import "../lib/Msgs.thingml"
-import "LinuxSerial.thingml"
+//import "LinuxSerial.thingml"
+import "LinuxSerial2.thingml"
 
 thing fragment ReadyMsg {
 	message CPUBridgeReady();

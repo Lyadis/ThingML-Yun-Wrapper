@@ -2,7 +2,7 @@ import "Bridge.thingml"
 
 configuration TestCfg {
 	instance bridge : Bridge
-	instance sp : LinuxSerial
+	instance sp : LinuxSerial2
 	instance t : Test
 	//instance t : MinTest
 	
