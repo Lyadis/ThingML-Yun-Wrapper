@@ -25,7 +25,7 @@ thing Bridge includes BridgeMsgs, SerialClientPort, ReadyMsg {
 	property ESCAPE_BYTE : Byte = 125
 	property Buffer : Byte[32]
 	property MsgSize : Byte = 0
-	property bps : Int16 = 115200
+	property bps : Int16 = 9600
 	
 	function SerialSend(b : Byte) do
 		if((b == START_BYTE) or (b == STOP_BYTE) or (b == ESCAPE_BYTE)) do
